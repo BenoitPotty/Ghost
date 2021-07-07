@@ -1,6 +1,5 @@
 const register = require('./register');
 const coreHelpers = require('../../../helpers');
-const debug = require('debug')('helpers');
 const registerThemeHelper = register.registerThemeHelper;
 const registerAsyncThemeHelper = register.registerAsyncThemeHelper;
 
