@@ -1,24 +1,27 @@
 const register = require('./register');
 const coreHelpers = require('../../../helpers');
+const debug = require('debug')('helpers');
 const registerThemeHelper = register.registerThemeHelper;
 const registerAsyncThemeHelper = register.registerAsyncThemeHelper;
 
 const registerAllCoreHelpers = function registerAllCoreHelpers() {
-
-    let asyncThemeHelpers = ['ghost_head', 'next_post', 'prev_post', 'get'];
-
-    // Register theme helpers
-    Object.keys(coreHelpers)
-        .filter(k => !asyncThemeHelpers.includes(k))
-        .forEach((helper) => {
-            registerThemeHelper(helper, coreHelpers[helper]);
-        });
+    const allHelpers = Object.keys(coreHelpers).filter(h => h !== 'prev_post');
+    const asyncHelpers = allHelpers.filter(h => h.startsWith('async_'));
+    const syncHelpers = allHelpers.filter(h => !h.startsWith('async_'));
 
     // Async theme helpers
-    registerAsyncThemeHelper('ghost_head', coreHelpers.ghost_head);
+    asyncHelpers.forEach((h) => {
+        registerAsyncThemeHelper(h.replace('async_', ''), coreHelpers[h]);
+    });
+
+    // Register theme helpers
+    syncHelpers.forEach((h) => {
+        registerThemeHelper(h, coreHelpers[h]);
+    });
+
+    // Specific case for next_post and prev_post as the same helper is registered twice
     registerAsyncThemeHelper('next_post', coreHelpers.prev_post);
     registerAsyncThemeHelper('prev_post', coreHelpers.prev_post);
-    registerAsyncThemeHelper('get', coreHelpers.get);
 };
 
 module.exports = coreHelpers;
