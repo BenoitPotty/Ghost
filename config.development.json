@@ -1,3 +1,27 @@
 {
+    "url": "http://localhost:2368/",
+    "server": {
+      "port": 2368,
+      "host": "0.0.0.0"
+    },
+    "database": {
+      "client": "sqlite3",
+      "connection": {
+        "filename": "./content/data/ghost-dev.db"
+      }
+    },
+    "mail": {
+      "transport": "Direct"
+    },
+    "logging": {
+      "transports": [
+        "file",
+        "stdout"
+      ]
+    },
+    "process": "local",
+    "imageOptimization": {
+      "resize":false
+    },
     "enableDeveloperExperiments": true
-}
+  }
