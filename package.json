@@ -42,7 +42,7 @@
     "fix:client": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../",
     "fix:server": "yarn cache clean && rm -rf node_modules && yarn",
     "fix": "yarn fix:client && yarn fix:server",
-    "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost-4.9.0",
+    "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost-4.9.0 --force-rm",
     "docker": "docker run -p 2368:2368 liip/ghost-4.9.0"
   },
   "engines": {
