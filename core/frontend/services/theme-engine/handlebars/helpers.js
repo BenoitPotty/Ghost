@@ -21,7 +21,6 @@ const registerAllCoreHelpers = function registerAllCoreHelpers() {
 
     // Register helpers from handlebars-helpers (https://github.com/helpers/handlebars-helpers)
     Object.keys(handlebarsHelpers).forEach((h) => {
-        console.log('REGISTERING :  ' + handlebarsHelpers[h]);
         registerThemeHelper(h, handlebarsHelpers[h]);
     });
 
