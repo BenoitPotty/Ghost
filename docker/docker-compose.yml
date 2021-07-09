@@ -19,3 +19,5 @@ services:
       - storage__ghost-storage-rokka__organization=ellexx
       - storage__ghost-storage-rokka__defaultStack=stage_ellexx_com
       - imageOptimization__resize=false
+      - database__client=sqlite3
+      - database__connection__filename=./content/data/ghost-dev.db
