@@ -25,7 +25,12 @@
         "ghost-storage-rokka": {
           "key": "Bf4UBL2l6l24dj2XRz27TlwK7tKVJdrE",
           "organization": "ellexx",
-          "defaultStack": "stage_ellexx_com"
+          "defaultStack": "stage_ellexx_com",
+          "imageConfiguration" : {
+              "srcsets" : [400, 600, 1000],
+              "unit" : "w",
+              "sizes" : "(min-width: 1400px) 1400px, 92vw"
+          }
         }
       },
     "imageOptimization": {

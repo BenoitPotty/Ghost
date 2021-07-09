@@ -1,9 +1,12 @@
 const {SafeString} = require('../services/proxy');
 const config = require('../../shared/config');
 const logging = require('@tryghost/logging');
-const isString = require('lodash/isString');
+const _ = require('lodash');
 
-function logRenderingImpossible(reason) {
+/**
+ * @param {string} reason
+ */
+function logRokkaRenderingImpossible(reason) {
     logging.warn(`Cannot generate proper Rokka img. Reason : ${reason}.`);
 }
 
@@ -11,34 +14,67 @@ function standardImage(imgSrc) {
     return new SafeString(`<img src="${imgSrc}" />`);
 }
 
+function ensureImageConfiguration(activeConfig) {
+    // Default values from Ghost
+    const srcsets = [300, 600, 1000, 2000];
+    const sizes = '(min-width: 1400px) 1400px, 92vw';
+    const unit = 'w';
+
+    if (activeConfig.imageConfiguration) {
+        let imageConfiguration = activeConfig.imageConfiguration;
+
+        if (!_.isArray(imageConfiguration.srcsets)) {
+            imageConfiguration.srcsets = srcsets;
+        }
+
+        if (!_.isString(imageConfiguration.sizes)) {
+            imageConfiguration.sizes = sizes;
+        }
+
+        if (!_.isString(imageConfiguration.unit)) {
+            imageConfiguration.unit = unit;
+        }
+    } else {
+        activeConfig.imageConfiguration = {srcsets, sizes, unit};
+    }
+}
+
+function generateSrcset(activeConfig, encodedImageUrl) {
+    return activeConfig.imageConfiguration.srcsets.map(s => `https://${activeConfig.organization}.rokka.io/${activeConfig.defaultStack}/resize-width-${s}/-${encodedImageUrl}-.jpg ${s}${activeConfig.imageConfiguration.unit}`).join(',');
+}
+
 // eslint-disable-next-line camelcase
 module.exports = function rokka_image(imageUrl, options) {
     const storageConfig = config.get('storage');
 
-    if (!isString(imageUrl)) {
-        logRenderingImpossible('No imageUrl was passed');
+    if (!_.isString(imageUrl)) {
+        logRokkaRenderingImpossible('No imageUrl was passed');
         return;
     }
 
     if (!options) {
-        logRenderingImpossible('No options were passed to the helper');
+        logRokkaRenderingImpossible('No options were passed to the helper');
         return standardImage(imageUrl);
     }
 
     if (!storageConfig) {
-        logRenderingImpossible('Storage not defined in configuration');
+        logRokkaRenderingImpossible('Storage not defined in configuration');
         return standardImage(imageUrl);
     }
 
     const activeConfig = storageConfig[storageConfig.active];
 
     if (!activeConfig) {
-        logRenderingImpossible('No active config found');
+        logRokkaRenderingImpossible('No active config found');
         return standardImage(imageUrl);
     }
 
-    const organization = activeConfig.organization;
-    const defaultStack = activeConfig.defaultStack;
+    if (!activeConfig.organization || !activeConfig.defaultStack) {
+        logRokkaRenderingImpossible(`Rokka configuration is not valid. Please check documentation`);
+        return standardImage(imageUrl);
+    }
+
+    ensureImageConfiguration(activeConfig);
 
     const encodedImageUrl = encodeURIComponent(imageUrl);
 
@@ -46,11 +82,9 @@ module.exports = function rokka_image(imageUrl, options) {
 
     return new SafeString(
         `<img
-        src="https://${organization}.rokka.io/${defaultStack}/-${encodedImageUrl}-.jpg"
-        srcset="https://${organization}.rokka.io/${defaultStack}/resize-width-300/-${encodedImageUrl}-.jpg 300w,
-                https://${organization}.rokka.io/${defaultStack}/resize-width-600/-${encodedImageUrl}-.jpg 600w,
-                https://${organization}.rokka.io/${defaultStack}/resize-width-1000/-${encodedImageUrl}-.jpg 1000w"
-        sizes="(min-width: 1400px) 1400px, 92vw"
+        src="https://${activeConfig.organization}.rokka.io/${activeConfig.defaultStack}/-${encodedImageUrl}-.jpg"
+        srcset="${generateSrcset(activeConfig, encodedImageUrl)}"
+        sizes="${activeConfig.imageConfiguration.sizes}"
         alt="${altText}" />`
     );
 };
