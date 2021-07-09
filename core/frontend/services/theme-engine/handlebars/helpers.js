@@ -2,6 +2,7 @@ const register = require('./register');
 const coreHelpers = require('../../../helpers');
 const registerThemeHelper = register.registerThemeHelper;
 const registerAsyncThemeHelper = register.registerAsyncThemeHelper;
+const handlebarsHelpers = require('handlebars-helpers')();
 
 const registerAllCoreHelpers = function registerAllCoreHelpers() {
     const allHelpers = Object.keys(coreHelpers).filter(h => h !== 'prev_post');
@@ -16,6 +17,12 @@ const registerAllCoreHelpers = function registerAllCoreHelpers() {
     // Register theme helpers
     syncHelpers.forEach((h) => {
         registerThemeHelper(h, coreHelpers[h]);
+    });
+
+    // Register helpers from handlebars-helpers (https://github.com/helpers/handlebars-helpers)
+    Object.keys(handlebarsHelpers).forEach((h) => {
+        console.log('REGISTERING :  ' + handlebarsHelpers[h]);
+        registerThemeHelper(h, handlebarsHelpers[h]);
     });
 
     // Specific case for next_post and prev_post as the same helper is registered twice
