@@ -14,3 +14,8 @@ services:
       - url=http://localhost:3000
       - server__port=2368
       - server__host=0.0.0.0
+      - storage__active=ghost-storage-rokka
+      - storage__ghost-storage-rokka__key=Bf4UBL2l6l24dj2XRz27TlwK7tKVJdrE
+      - storage__ghost-storage-rokka__organization=ellexx
+      - storage__ghost-storage-rokka__defaultStack=stage_ellexx_com
+      - imageOptimization__resize=false

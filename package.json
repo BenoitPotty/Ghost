@@ -46,7 +46,7 @@
     "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost --force-rm",
     "docker:up": "docker-compose -f docker/docker-compose.yml up",
     "docker:down": "docker-compose -f docker/docker-compose.yml down",
-    "docker:release" : "npm run build:release && npm run docker:build"
+    "docker:release": "npm run build:release && npm run docker:build"
   },
   "engines": {
     "node": "^12.22.1 || ^14.16.1",
@@ -118,6 +118,7 @@
     "express-session": "1.17.2",
     "fs-extra": "10.0.0",
     "ghost-storage-base": "0.0.4",
+    "ghost-storage-rokka": "^0.1.0",
     "glob": "7.1.7",
     "got": "9.6.0",
     "gscan": "4.1.0",
