@@ -1,12 +1,12 @@
 FROM node:14-buster-slim
 
-ENV NODE_ENV development
+ENV NODE_ENV production
 ENV GHOST_CLI_VERSION 1.17.3
 ENV GHOST_INSTALL /var/lib/ghost
 ENV GHOST_CONTENT /var/lib/ghost/content
 ENV GHOST_VERSION 4.9.0
 
-COPY . $GHOST_INSTALL
+COPY .build/release $GHOST_INSTALL
 RUN set -eux; \
     chown -R node:node "$GHOST_INSTALL";
 
@@ -16,7 +16,7 @@ WORKDIR $GHOST_INSTALL
 
 USER node
 
-RUN npm install
+RUN yarn
 
 EXPOSE 2368
 

@@ -1,5 +1,6 @@
 **/.git
-.github
-.gitignore
-.gitmodules
-node_modules
+**/.github
+**/.gitignore
+**/.gitmodules
+**/yarn cevnode_modules
+**/test

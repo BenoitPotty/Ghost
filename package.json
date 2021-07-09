@@ -42,8 +42,11 @@
     "fix:client": "yarn cache clean && cd core/client && rm -rf node_modules tmp dist && yarn && cd ../../",
     "fix:server": "yarn cache clean && rm -rf node_modules && yarn",
     "fix": "yarn fix:client && yarn fix:server",
-    "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost-4.9.0 --force-rm",
-    "docker": "docker-compose -f docker/docker-compose.yml up"
+    "build:release": "grunt release",
+    "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost --force-rm",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:release" : "npm run build:release && npm run docker:build"
   },
   "engines": {
     "node": "^12.22.1 || ^14.16.1",

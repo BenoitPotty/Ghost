@@ -2,14 +2,15 @@ version: "3"
 
 services:
   liip-ghost:
-    image: liip/ghost-4.9.0
+    image: liip/ghost
     container_name: liip-ghost
     restart: unless-stopped
     volumes:
-      - "../core:/var/lib/ghost/core"
       - "../content:/var/lib/ghost/content"
     ports:
       - "3000:2368"
     environment:
       - NODE_ENV=development
       - url=http://localhost:3000
+      - server__port=2368
+      - server__host=0.0.0.0
