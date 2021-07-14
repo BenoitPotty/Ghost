@@ -33,6 +33,16 @@ const validateVisibility = async function (frame) {
     }
 };
 
+function allowAdditionalProperties(reason, frame) {
+    if (reason.errorDetails.every((element) => {
+        return element.keyword === 'additionalProperties';
+    })) {
+        return validateVisibility(frame);
+    } else {
+        throw reason;
+    }
+}
+
 module.exports = {
     add(apiConfig, frame) {
         return jsonSchema.validate(...arguments).then(() => {
@@ -42,6 +52,8 @@ module.exports = {
     edit(apiConfig, frame) {
         return jsonSchema.validate(...arguments).then(() => {
             return validateVisibility(frame);
+        }).catch((reason) => {
+            allowAdditionalProperties(reason, frame);
         });
     }
 };

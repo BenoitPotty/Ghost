@@ -427,6 +427,8 @@ Post = ghostBookshelf.Model.extend({
         let tagsToSave;
         const ops = [];
 
+        console.log("Updated : ", this.get('order'));
+
         // CASE: disallow published -> scheduled
         // @TODO: remove when we have versioning based on updated_at
         if (newStatus !== olderStatus && newStatus === 'scheduled' && olderStatus === 'published') {
