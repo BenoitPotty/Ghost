@@ -44,9 +44,12 @@
     "fix": "yarn fix:client && yarn fix:server",
     "build:release": "grunt release",
     "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost --force-rm",
+    "docker:build-prod": "docker build -f docker/Dockerfile . -t docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx --force-rm",
     "docker:up": "docker-compose -f docker/docker-compose.yml up",
     "docker:down": "docker-compose -f docker/docker-compose.yml down",
-    "docker:release": "npm run build:release && npm run docker:build"
+    "docker:release": "npm run build:release && npm run docker:build-prod",
+    "docker:publish": "npm run docker:release && npm run docker:push",
+    "docker:push": "docker push docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx"
   },
   "engines": {
     "node": "^12.22.1 || ^14.16.1",
