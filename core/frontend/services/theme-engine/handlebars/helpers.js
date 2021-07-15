@@ -5,14 +5,9 @@ const registerAsyncThemeHelper = register.registerAsyncThemeHelper;
 const handlebarsHelpers = require('handlebars-helpers')();
 
 const registerAllCoreHelpers = function registerAllCoreHelpers() {
-    const allHelpers = Object.keys(coreHelpers).filter(h => h !== 'prev_post');
-    const asyncHelpers = allHelpers.filter(h => h.startsWith('async_'));
-    const syncHelpers = allHelpers.filter(h => !h.startsWith('async_'));
-
-    // Async theme helpers
-    asyncHelpers.forEach((h) => {
-        registerAsyncThemeHelper(h.replace('async_', ''), coreHelpers[h]);
-    });
+    const allHelpers = Object.keys(coreHelpers);
+    const asyncHelpers = ['prev_post', 'get', 'ghost_head'];
+    const syncHelpers = allHelpers.filter(h => !asyncHelpers.includes(h));
 
     // Register theme helpers
     syncHelpers.forEach((h) => {
@@ -24,7 +19,9 @@ const registerAllCoreHelpers = function registerAllCoreHelpers() {
         registerThemeHelper(h, handlebarsHelpers[h]);
     });
 
-    // Specific case for next_post and prev_post as the same helper is registered twice
+    // Register specific async helpers. Issue when making it dynamic. Not need to overengineer now
+    registerAsyncThemeHelper('get', coreHelpers.get);
+    registerAsyncThemeHelper('ghost_head', coreHelpers.ghost_head);
     registerAsyncThemeHelper('next_post', coreHelpers.prev_post);
     registerAsyncThemeHelper('prev_post', coreHelpers.prev_post);
 };
