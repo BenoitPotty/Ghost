@@ -4,6 +4,11 @@
   "description": "The professional publishing platform",
   "author": "Ghost Foundation",
   "homepage": "https://ghost.org",
+  "docker": {
+      "name": "docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx",
+      "file": "docker/Dockerfile",
+      "compose": "docker/docker-compose.yml"
+  },
   "keywords": [
     "ghost",
     "blog",
@@ -43,13 +48,13 @@
     "fix:server": "yarn cache clean && rm -rf node_modules && yarn",
     "fix": "yarn fix:client && yarn fix:server",
     "build:release": "grunt release",
-    "docker:build": "docker build -f docker/Dockerfile . -t liip/ghost --force-rm",
-    "docker:build-prod": "docker build -f docker/Dockerfile . -t docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx --force-rm",
-    "docker:up": "docker-compose -f docker/docker-compose.yml up",
-    "docker:down": "docker-compose -f docker/docker-compose.yml down",
-    "docker:release": "npm run build:release && npm run docker:build-prod",
-    "docker:publish": "npm run docker:release && npm run docker:push",
-    "docker:push": "docker push docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx"
+    "docker:build": "docker build -f $npm_package_docker_file . -t $npm_package_docker_name:$npm_package_version --force-rm",
+    "docker:tag": "docker tag $npm_package_docker_name:$npm_package_version $npm_package_docker_name:latest",
+    "docker:push": "docker push $npm_package_docker_name:$npm_package_version && docker push $npm_package_docker_name:latest",
+    "docker:release": "npm run build:release && npm run docker:build",
+    "docker:publish": "npm run docker:release && npm run docker:tag && npm run docker:push",
+    "docker:up": "docker-compose -f $npm_package_docker_compose up",
+    "docker:down": "docker-compose -f $npm_package_docker_compose down"
   },
   "engines": {
     "node": "^12.22.1 || ^14.16.1",
