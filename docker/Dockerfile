@@ -1,10 +1,9 @@
 FROM node:14-buster-slim
 
-ENV NODE_ENV production
 ENV GHOST_CLI_VERSION 1.17.3
 ENV GHOST_INSTALL /var/lib/ghost
 ENV GHOST_CONTENT /var/lib/ghost/content
-ENV GHOST_VERSION 4.9.0
+ENV GHOST_VERSION 4.9.4
 
 COPY .build/release $GHOST_INSTALL
 RUN set -eux; \
