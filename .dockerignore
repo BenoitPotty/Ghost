@@ -4,3 +4,5 @@
 **/.gitmodules
 **/yarn cevnode_modules
 **/test
+config.development.json
+config.production.json
