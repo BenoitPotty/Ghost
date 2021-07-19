@@ -20,6 +20,16 @@ class PostMapGenerator extends BaseMapGenerator {
 
         return {priority};
     }
+
+    createFrequencyNodeFromDatum(datum) {
+        let frequency = 'never';
+
+        if (!datum) {
+            return;
+        }
+
+        return {frequency};
+    }
 }
 
 module.exports = PostMapGenerator;
