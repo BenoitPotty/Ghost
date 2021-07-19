@@ -7,7 +7,8 @@
   "docker": {
       "name": "docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx",
       "file": "docker/Dockerfile",
-      "compose": "docker/docker-compose.yml"
+      "compose": "docker/docker-compose.yml",
+      "build": "2"
   },
   "keywords": [
     "ghost",
@@ -48,9 +49,9 @@
     "fix:server": "yarn cache clean && rm -rf node_modules && yarn",
     "fix": "yarn fix:client && yarn fix:server",
     "build:release": "grunt release",
-    "docker:build": "docker build -f $npm_package_docker_file . -t $npm_package_docker_name:$npm_package_version --force-rm",
-    "docker:tag": "docker tag $npm_package_docker_name:$npm_package_version $npm_package_docker_name:latest",
-    "docker:push": "docker push $npm_package_docker_name:$npm_package_version && docker push $npm_package_docker_name:latest",
+    "docker:build": "docker build -f $npm_package_docker_file . -t $npm_package_docker_name:$npm_package_version-$npm_package_docker_build --force-rm",
+    "docker:tag": "docker tag $npm_package_docker_name:$npm_package_version-$npm_package_docker_build $npm_package_docker_name:latest",
+    "docker:push": "docker push $npm_package_docker_name:$npm_package_version-$npm_package_docker_build && docker push $npm_package_docker_name:latest",
     "docker:release": "npm run build:release && npm run docker:build",
     "docker:publish": "npm run docker:release && npm run docker:tag && npm run docker:push",
     "docker:up": "docker-compose -f $npm_package_docker_compose up",
