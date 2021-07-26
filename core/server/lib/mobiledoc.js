@@ -4,7 +4,7 @@ const logging = require('@tryghost/logging');
 const config = require('../../shared/config');
 const storage = require('../adapters/storage');
 const imageTransform = require('@tryghost/image-transform');
-const rokkaImage = require('./image/rokka_image');
+const rokkaImage = require('./image/rokka-image');
 
 let cardFactory;
 let cards;
