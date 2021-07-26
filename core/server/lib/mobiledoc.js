@@ -4,6 +4,7 @@ const logging = require('@tryghost/logging');
 const config = require('../../shared/config');
 const storage = require('../adapters/storage');
 const imageTransform = require('@tryghost/image-transform');
+const rokkaImage = require('./image/rokka_image');
 
 let cardFactory;
 let cards;
@@ -45,6 +46,9 @@ module.exports = {
             cards = defaultCards.map((card) => {
                 return cardFactory.createCard(card);
             });
+
+            let imageRender = cards.find(renderer => renderer.name === 'image');
+            imageRender.render = rokkaImage(imageRender.render);
         }
 
         return cards;
