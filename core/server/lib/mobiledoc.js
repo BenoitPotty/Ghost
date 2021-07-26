@@ -5,6 +5,7 @@ const config = require('../../shared/config');
 const storage = require('../adapters/storage');
 const imageTransform = require('@tryghost/image-transform');
 const rokkaImage = require('./image/rokka-image');
+const rokkaGallery = require('./image/rokka-gallery');
 
 let cardFactory;
 let cards;
@@ -47,8 +48,12 @@ module.exports = {
                 return cardFactory.createCard(card);
             });
 
+            // Replace the card renderers by our own rokka renderers
             let imageRender = cards.find(renderer => renderer.name === 'image');
             imageRender.render = rokkaImage(imageRender.render);
+
+            let galleryRender = cards.find(renderer => renderer.name === 'gallery');
+            galleryRender.render = rokkaGallery(galleryRender.render);
         }
 
         return cards;
