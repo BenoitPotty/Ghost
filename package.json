@@ -8,7 +8,7 @@
       "name": "docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx",
       "file": "docker/Dockerfile",
       "compose": "docker/docker-compose.yml",
-      "build": "3"
+      "build": "4"
   },
   "keywords": [
     "ghost",
