@@ -1,6 +1,5 @@
-const rokka = require('../../../frontend/helpers/rokka_image');
 const logging = require('@tryghost/logging');
-const cheerio = require('cheerio');
+const copyAttributes = require('./rokka-utils');
 
 module.exports = function rokkaImage(originalRenderer) {
     return function ({payload, env: {dom}, options}) {
@@ -8,15 +7,7 @@ module.exports = function rokkaImage(originalRenderer) {
 
         try {
             let currentImage = figure.firstChild;
-
-            //Use the rokka_image helper function to uniformize image generation
-            let imgString = rokka(payload.src, {hash: {altText: payload.alt || ''}});
-            const rokkaImg = cheerio.load(imgString.toHTML());
-
-            currentImage.setAttribute('src', rokkaImg('img').attr('src'));
-            currentImage.setAttribute('srcset', rokkaImg('img').attr('srcset'));
-            currentImage.setAttribute('alt', rokkaImg('img').attr('alt'));
-            currentImage.setAttribute('sizes', rokkaImg('img').attr('sizes'));
+            copyAttributes(payload.src, payload.alt, currentImage);
         } catch (error) {
             logging.error(`Impossible to render Rokka Image. Reason : ${error}`);
         }
