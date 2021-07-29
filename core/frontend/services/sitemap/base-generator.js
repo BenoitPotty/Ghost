@@ -128,7 +128,7 @@ class BaseSiteMapGenerator {
     }
 
     createPriorityNodeFromDatum(datum) {
-        let priority = 1;
+        const priority = 1;
 
         if (!datum) {
             return;
@@ -138,7 +138,7 @@ class BaseSiteMapGenerator {
     }
 
     createFrequencyNodeFromDatum(datum) {
-        let frequency = 'daily';
+        const frequency = 'daily';
 
         if (!datum) {
             return;
