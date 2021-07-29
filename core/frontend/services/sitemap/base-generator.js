@@ -96,8 +96,6 @@ class BaseSiteMapGenerator {
     createUrlNodeFromDatum(url, datum) {
         let node;
         let imgNode;
-        let priorityNode;
-        let frequencyNode;
 
         node = {
             url: [
@@ -112,13 +110,13 @@ class BaseSiteMapGenerator {
             node.url.push(imgNode);
         }
 
-        priorityNode = this.createPriorityNodeFromDatum(datum);
+        const priorityNode = this.createPriorityNodeFromDatum(datum);
 
         if (priorityNode) {
             node.url.push(priorityNode);
         }
 
-        frequencyNode = this.createFrequencyNodeFromDatum(datum);
+        const frequencyNode = this.createFrequencyNodeFromDatum(datum);
 
         if (priorityNode) {
             node.url.push(frequencyNode);
