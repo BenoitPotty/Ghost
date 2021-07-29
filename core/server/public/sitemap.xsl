@@ -102,6 +102,8 @@
                                     <th width="70%">URL (<xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> total)</th>
                                     <th width="15%">Images</th>
                                     <th title="Last Modification Time" width="15%">Last Modified</th>
+                                    <th width="15%">Priority</th>
+                                    <th width="15%">Frequency</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,6 +124,12 @@
                                         </td>
                                         <td>
                                             <xsl:value-of select="concat(substring(sitemap:lastmod,0,11),concat(' ', substring(sitemap:lastmod,12,5)))"/>
+                                        </td>
+                                        <td>
+                                            <xsl:value-of select="sitemap:priority"/>
+                                        </td>
+                                        <td>
+                                            <xsl:value-of select="sitemap:frequency"/>
                                         </td>
                                     </tr>
                                 </xsl:for-each>
