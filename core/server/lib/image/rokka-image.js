@@ -9,6 +9,7 @@ module.exports = function rokkaImage(originalRenderer) {
             let currentImage = figure.firstChild;
             rokkaUtils.copyAttributes(payload.src, payload.alt, currentImage);
             rokkaUtils.wrap(dom, currentImage);
+            rokkaUtils.setOrientationClass(currentImage, figure);
         } catch (error) {
             logging.error(`Impossible to render Rokka Image. Reason : ${error}`);
         }

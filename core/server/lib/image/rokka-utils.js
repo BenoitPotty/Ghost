@@ -17,5 +17,18 @@ module.exports = {
         const wrapper = dom.createElement('div');
         element.parentNode.insertBefore(wrapper, element);
         wrapper.appendChild(element);
+    },
+    setOrientationClass: function (image, figure) {
+        const width = image.getAttribute('width');
+        const height = image.getAttribute('height');
+        if (width < height) {
+            addClass(figure, 'is-portrait');
+        } else {
+            addClass(figure, 'is-landscape');
+        }
     }
 };
+
+function addClass(element, className) {
+    element.setAttribute('class', `${element.getAttribute('class')} ${className}`);
+}

@@ -1,5 +1,5 @@
 const logging = require('@tryghost/logging');
-const copyAttributes = require('./rokka-utils');
+const rokkaUtils = require('./rokka-utils');
 
 module.exports = function rokkaGallery(originalRenderer) {
     return function ({payload, env: {dom}, options}) {
@@ -12,7 +12,7 @@ module.exports = function rokkaGallery(originalRenderer) {
                 let imgDiv = row.firstChild;
                 do {
                     let img = imgDiv.firstChild;
-                    copyAttributes(img.getAttribute('src'), payload.alt, img);
+                    rokkaUtils.copyAttributes(img.getAttribute('src'), payload.alt, img);
                     imgDiv = imgDiv.nextSibling;
                 } while (imgDiv);
 
