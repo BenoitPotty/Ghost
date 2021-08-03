@@ -19,8 +19,9 @@ module.exports = {
         wrapper.appendChild(element);
     },
     setOrientationClass: function (image, figure) {
-        const width = image.getAttribute('width');
-        const height = image.getAttribute('height');
+        const width = parseInt(image.getAttribute('width'));
+        const height = parseInt(image.getAttribute('height'));
+
         if (width < height) {
             addClass(figure, 'is-portrait');
         } else {
