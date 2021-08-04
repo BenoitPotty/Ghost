@@ -1,27 +1,22 @@
-const logging = require('@tryghost/logging');
 const rokkaUtils = require('./rokka-utils');
 
 module.exports = function rokkaGallery(originalRenderer) {
     return function ({payload, env: {dom}, options}) {
-        const gallery = originalRenderer({payload, env: {dom}, options});
-        try {
-            let container = gallery.firstChild;
-            let row = container.firstChild;
+        let gallery = originalRenderer({payload, env: {dom}, options});
+        gallery = dom.createElement('div');
+        gallery.setAttribute('class', 'ellexx-gallery');
 
-            do {
-                let imgDiv = row.firstChild;
-                do {
-                    let img = imgDiv.firstChild;
-                    rokkaUtils.copyAttributes(img.getAttribute('src'), payload.alt, img);
-                    imgDiv = imgDiv.nextSibling;
-                } while (imgDiv);
+        payload.images.forEach((image, index) => {
+            const img = dom.createElement('img');
+            rokkaUtils.copyAttributes(image.src, payload.caption ? `${payload.caption} ${index}` : `Gallery image ${index}`, img);
 
-                row = row.nextSibling;
-            } while (row);
-        } catch (error) {
-            logging.error(`Cannot render Rokka Gallery. Reason : ${error}`);
-        }
+            const galleryItem = dom.createElement('div');
+            galleryItem.setAttribute('id', `gallery_img_${index}`);
+            galleryItem.setAttribute('class', `ellexx-gallery-item ${image.width < image.height ? 'is-portrait' : 'is-landscape'}`);
+            galleryItem.appendChild(img);
 
+            gallery.appendChild(galleryItem);
+        });
         return gallery;
     };
 };
