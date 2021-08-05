@@ -15,6 +15,9 @@ helperFiles.forEach((helper) => {
 // Go through the theme directory
 let customThemesHelperFiles = glob.sync(path.join(config.getContentPath('themes'), '**/helpers/!(index).js'));
 customThemesHelperFiles.forEach((helper) => {
+    if (helper.includes('node_modules')) {
+        return;
+    }
     let name = helper.match(/[ \w-]+?(?=\.)/)[0];
     helpers[name] = require(helper.replace('.js', ''));
 });
