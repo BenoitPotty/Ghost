@@ -22,6 +22,9 @@ const defaultStyle = `
     z-index: 10;
   }
 `;
+const payload = require('../../services/webhooks/payload');
+const rokkaUtils = require('./rokka-utils');
+
 module.exports = function rokkaGallery() {
     return function ({payload, env: {dom}}) {
         const gallery = dom.createElement('div');
@@ -76,7 +79,10 @@ function createInput(dom, slideNumber) {
 function createSlide(dom, image) {
     const slide = dom.createElement('div');
     slide.setAttribute('class', `carousel-item absolute opacity-0 bg-center`);
-    slide.setAttribute('style', `height:500px; background-image: url(${image.src})`);
+    const img = dom.createElement('img');
+    rokkaUtils.copyAttributes(image.src, '', img);
+    img.setAttribute('src', image.src);
+    slide.appendChild(img);
     return slide;
 }
 
