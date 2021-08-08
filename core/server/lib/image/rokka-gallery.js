@@ -1,5 +1,27 @@
-const controlCommonClasses = 'w-10 h-10 ml-2 md:ml-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 my-auto';
+const controlCommonClasses = 'w-10 h-10 absolute cursor-pointer hidden font-bold text-black hover:text-white rounded-full bg-white hover:bg-blue-700 leading-tight text-center z-10 inset-y-0 my-auto';
+const defaultStyle = `
+  .carousel-open:checked+.carousel-item {
+    position: static;
+    opacity: 100;
+  }
 
+  .carousel-item {
+    -webkit-transition: opacity 0.6s ease-out;
+    transition: opacity 0.6s ease-out;
+  }
+
+  .carousel-indicators {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 2%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 10;
+  }
+`;
 module.exports = function rokkaGallery() {
     return function ({payload, env: {dom}}) {
         const gallery = dom.createElement('div');
@@ -31,6 +53,8 @@ module.exports = function rokkaGallery() {
 
         slides.appendChild(indicators);
 
+        slides.appendChild(createStyle(dom, imgCount));
+
         return gallery;
     };
 };
@@ -59,7 +83,7 @@ function createSlide(dom, image) {
 function createPreviousControl(dom, slideNumber, slideCount) {
     const previous = dom.createElement('label');
     previous.setAttribute('for', `carousel-${slideNumber === 1 ? slideCount : slideNumber - 1}`);
-    previous.setAttribute('class', `control-${slideNumber} ${controlCommonClasses} left-0`);
+    previous.setAttribute('class', `control-${slideNumber} ${controlCommonClasses} left-0 ml-2 md:ml-10`);
     previous.appendChild(createControlContent(dom, '<'));
     return previous;
 }
@@ -67,7 +91,7 @@ function createPreviousControl(dom, slideNumber, slideCount) {
 function createNextControl(dom, slideNumber, slideCount) {
     const next = dom.createElement('label');
     next.setAttribute('for', `carousel-${slideNumber === slideCount ? 1 : slideNumber + 1}`);
-    next.setAttribute('class', `next control-${slideNumber} ${controlCommonClasses} right-0`);
+    next.setAttribute('class', `next control-${slideNumber} ${controlCommonClasses} right-0 mr-2 md:mr-10`);
     next.appendChild(createControlContent(dom, '>'));
     return next;
 }
@@ -90,4 +114,35 @@ function createIndicator(dom, slideNumber, indicators) {
     indicatorLabel.appendChild(indicatorText);
     indicator.appendChild(indicatorLabel);
     indicators.appendChild(indicator);
+}
+
+function createStyle(dom, slideCount) {
+    const style = dom.createElement('style');
+    let styleContent = '';
+    styleContent = appendControlsStyle(slideCount, styleContent);
+    styleContent = appendIndicatorsStyle(slideCount, styleContent);
+    styleContent += defaultStyle;
+    style.appendChild(dom.createTextNode(styleContent));
+    return style;
+}
+
+function appendControlsStyle(slideCount, styleContent) {
+    let txt = [...Array(slideCount).keys()]
+        .map(x => `#carousel-${x + 1}:checked~.control-${x + 1}`)
+        .join(', ');
+    txt += `{
+        display: block
+    }
+    `;
+    return styleContent += txt;
+}
+
+function appendIndicatorsStyle(slideCount, styleContent) {
+    let txt = [...Array(slideCount).keys()]
+        .map(x => `#carousel-${x + 1}:checked~.control-${x + 1}~.carousel-indicators li:nth-child(${x + 1}) .carousel-bullet`)
+        .join(', ');
+    txt += `{
+        color: #2b6cb0;
+    }`;
+    return styleContent += txt;
 }
