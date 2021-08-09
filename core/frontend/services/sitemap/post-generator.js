@@ -22,7 +22,7 @@ class PostMapGenerator extends BaseMapGenerator {
     }
 
     createFrequencyNodeFromDatum(datum) {
-        let frequency = 'yearly';
+        let frequency = 'weekly';
 
         if (!datum) {
             return;
