@@ -4,6 +4,7 @@ ENV GHOST_CLI_VERSION 1.17.3
 ENV GHOST_INSTALL /var/lib/ghost
 ENV GHOST_CONTENT /var/lib/ghost/content
 ENV GHOST_VERSION 4.9.4
+ENV TZ Europe/Zurich
 
 COPY .build/release $GHOST_INSTALL
 RUN set -eux; \
@@ -14,6 +15,8 @@ VOLUME $GHOST_CONTENT
 WORKDIR $GHOST_INSTALL
 
 USER node
+
+RUN export TZ >> /home/node/.profile
 
 RUN yarn
 
