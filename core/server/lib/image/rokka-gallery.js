@@ -36,7 +36,9 @@ function createCaption(dom, caption) {
 
     const captionText = dom.createElement('div');
     rokkaUtils.addClass(captionText, 'slider_caption_content');
-    captionText.appendChild(dom.createTextNode(caption));
+    if (caption) {
+        captionText.appendChild(dom.createTextNode(caption));
+    }
     captionElement.appendChild(captionText);
 
     const captionControls = createCaptionControls(dom);
