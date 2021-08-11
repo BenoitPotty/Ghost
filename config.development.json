@@ -26,6 +26,7 @@
           "key": "Bf4UBL2l6l24dj2XRz27TlwK7tKVJdrE",
           "organization": "ellexx",
           "defaultStack": "stage_ellexx_com",
+          "galleryStack": "gallery_images_landscape",
           "imageConfiguration" : {
               "srcsets" : [400, 600, 1000],
               "unit" : "w",

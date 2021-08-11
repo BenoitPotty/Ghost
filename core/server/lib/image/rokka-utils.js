@@ -2,34 +2,47 @@ const cheerio = require('cheerio');
 const rokka = require('../../../frontend/helpers/rokka_image');
 
 module.exports = {
-    copyAttributes: function (src, alt, currentImage) {
+    copyAttributesWithStack(src, alt, stack, currentImage) {
+        let imgString = rokka(src, {
+            hash: {
+                altText: alt || '',
+                stack: stack
+            }
+        });
+        copyAttributesFromRokka(imgString, currentImage);
+    },
+    copyAttributes(src, alt, currentImage) {
         let imgString = rokka(src, {
             hash: {altText: alt || ''}
         });
-        const rokkaImg = cheerio.load(imgString.toHTML());
-
-        currentImage.setAttribute('src', rokkaImg('img').attr('src'));
-        currentImage.setAttribute('srcset', rokkaImg('img').attr('srcset'));
-        currentImage.setAttribute('alt', rokkaImg('img').attr('alt'));
-        currentImage.setAttribute('sizes', rokkaImg('img').attr('sizes'));
+        copyAttributesFromRokka(imgString, currentImage);
     },
-    wrap: function (dom, element) {
+    wrap(dom, element) {
         const wrapper = dom.createElement('div');
         element.parentNode.insertBefore(wrapper, element);
         wrapper.appendChild(element);
     },
-    setOrientationClass: function (image, figure) {
+    setOrientationClass(image, figure) {
         const width = parseInt(image.getAttribute('width'));
         const height = parseInt(image.getAttribute('height'));
 
         if (width < height) {
-            addClass(figure, 'is-portrait');
+            this.addClass(figure, 'is-portrait');
         } else {
-            addClass(figure, 'is-landscape');
+            this.addClass(figure, 'is-landscape');
         }
+    },
+    addClass(element, className) {
+        const currentClasses = element.getAttribute('class');
+        element.setAttribute('class', currentClasses ? `${currentClasses} ${className}` : className);
     }
 };
 
-function addClass(element, className) {
-    element.setAttribute('class', `${element.getAttribute('class')} ${className}`);
+function copyAttributesFromRokka(imgString, currentImage) {
+    const rokkaImg = cheerio.load(imgString.toHTML());
+
+    currentImage.setAttribute('src', rokkaImg('img').attr('src'));
+    currentImage.setAttribute('srcset', rokkaImg('img').attr('srcset'));
+    currentImage.setAttribute('alt', rokkaImg('img').attr('alt'));
+    currentImage.setAttribute('sizes', rokkaImg('img').attr('sizes'));
 }

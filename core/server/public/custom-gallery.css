@@ -1,0 +1,37 @@
+.slider_slides {
+    visibility: hidden;
+}
+.slider_slides.slick-initialized {
+    visibility: visible;
+    margin
+}
+
+.slider_bullets,
+.slick-dotted.slick-slider {
+    margin-bottom: 1em;
+}
+
+.slider_bullets .slick-dots {
+    position: inherit;
+}
+
+.slider_caption {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+.slider_caption_controls {
+    text-align: end;
+    font-size: x-large;
+}
+.slider_caption_controls span {
+    cursor: pointer;
+}
+
+.slider_caption_controls span + span{
+    margin-right: 1rem;
+}
+
+.slick-dots li button:before {
+    font-size: x-large;
+}

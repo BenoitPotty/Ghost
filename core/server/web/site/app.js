@@ -102,10 +102,21 @@ module.exports = function setupSiteApp(options = {}) {
     // Serve stylesheets for default templates
     siteApp.use(mw.servePublicFile('public/ghost.css', 'text/css', constants.ONE_HOUR_S));
     siteApp.use(mw.servePublicFile('public/ghost.min.css', 'text/css', constants.ONE_YEAR_S));
+    siteApp.use(mw.servePublicFile('public/slick.css', 'text/css', constants.ONE_YEAR_S));
+    siteApp.use(mw.servePublicFile('public/slick-theme.css', 'text/css', constants.ONE_YEAR_S));
+    siteApp.use(mw.servePublicFile('public/custom-gallery.css', 'text/css', constants.ONE_YEAR_S));
+
+    // Serve scripts for gallery
+    siteApp.use(mw.servePublicFile('public/slick.min.js', 'text/javascript', constants.ONE_HOUR_S));
+
+    // Serve fonts for gallery
+    siteApp.use(mw.servePublicFile('public/fonts/slick.woff', 'font/woff', constants.ONE_HOUR_S));
+    siteApp.use(mw.servePublicFile('public/fonts/slick.ttf', 'font/ttf', constants.ONE_HOUR_S));
 
     // Serve images for default templates
     siteApp.use(mw.servePublicFile('public/404-ghost@2x.png', 'image/png', constants.ONE_HOUR_S));
     siteApp.use(mw.servePublicFile('public/404-ghost.png', 'image/png', constants.ONE_HOUR_S));
+    siteApp.use(mw.servePublicFile('public/ajax-loader.gif', 'image/gif', constants.ONE_HOUR_S));
 
     // Serve blog images using the storage adapter
     siteApp.use(STATIC_IMAGE_URL_PREFIX, mw.handleImageSizes, storage.getStorage().serve());
