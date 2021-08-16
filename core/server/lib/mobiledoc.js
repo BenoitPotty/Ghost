@@ -32,6 +32,10 @@ module.exports = {
             const CardFactory = require('@tryghost/kg-card-factory');
             const defaultCards = require('@tryghost/kg-default-cards');
 
+            // TODO: Discover ellex card automatically
+            const zdt = require('./ellexx/zdt');
+            defaultCards.push(zdt);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
