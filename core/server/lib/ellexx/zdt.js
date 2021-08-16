@@ -14,15 +14,17 @@ module.exports = {
     render({payload, env: {dom}}) {
         let root = dom.createElement('div');
         root.setAttribute('class', 'zdt');
+
+        let tempRoot = root;
         if (payload.zdt_link) {
             const link = createLink(dom, payload.zdt_link);
             root.appendChild(link);
-            root = link;
+            tempRoot = link;
         }
 
-        root.appendChild(createNumber(dom, payload.zdt_number));
-        root.appendChild(createContent(dom, payload.zdt_content));
-        root.appendChild(createSource(dom, payload.zdt_source));
+        tempRoot.appendChild(createNumber(dom, payload.zdt_number));
+        tempRoot.appendChild(createContent(dom, payload.zdt_content));
+        tempRoot.appendChild(createSource(dom, payload.zdt_source));
 
         return root;
     },
