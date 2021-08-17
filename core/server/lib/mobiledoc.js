@@ -58,12 +58,12 @@ module.exports = {
                 return cardFactory.createCard(card);
             });
 
-            // Replace the card renderers by our own rokka renderers
+            // TODO: Move into seperate file. Replace the card renderers by our own rokka renderers
             let imageRender = cards.find(renderer => renderer.name === 'image');
             imageRender.render = rokkaImage(imageRender.render);
 
             let galleryRender = cards.find(renderer => renderer.name === 'gallery');
-            galleryRender.render = rokkaGallery(galleryRender.render);
+            galleryRender.render = rokkaGallery();
         }
 
         return cards;
