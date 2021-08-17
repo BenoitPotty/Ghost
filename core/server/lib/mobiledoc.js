@@ -39,6 +39,9 @@ module.exports = {
             const fdw = require('./ellexx/fdw');
             defaultCards.push(fdw);
 
+            const zit = require('./ellexx/zit');
+            defaultCards.push(zit);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
