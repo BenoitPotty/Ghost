@@ -8,7 +8,7 @@ class FdwRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom);
         this.initData(payload);
         this.addCardLink();
-        this.appendBlock('frage');
+        this.appendBlock('sentence');
         return this.root;
     }
 }
