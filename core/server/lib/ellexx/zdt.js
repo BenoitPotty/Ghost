@@ -53,7 +53,7 @@ function createLink(dom, link) {
 }
 
 function createNumber(dom, number) {
-    const numberElement = dom.createElement('h1');
+    const numberElement = dom.createElement('div');
     numberElement.setAttribute('class', 'zdt-number');
     if (number) {
         numberElement.appendChild(dom.createTextNode(number));
