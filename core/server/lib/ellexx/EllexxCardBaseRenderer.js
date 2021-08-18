@@ -41,9 +41,11 @@ class EllexxCardBaseRenderer {
         this.entryPoint = this.root;
     }
 
-    addCardLink() {
+    addCardLink(link = null) {
         let key = 'link';
-        let link = this.getData(key);
+        if (link === null) {
+            link = this.getData(key);
+        }
         if (link) {
             const linkElement = this.dom.createElement('a');
             linkElement.setAttribute('class', this.getClassName(key));
