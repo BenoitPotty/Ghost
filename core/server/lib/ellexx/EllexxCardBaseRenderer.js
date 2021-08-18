@@ -123,7 +123,7 @@ class EllexxCardBaseRenderer {
 }
 
 function enrichYoutubeUrl(url) {
-    return `${url}&modestbranding=1&controls=0`;
+    return `${url}&modestbranding=1`;
 }
 
 module.exports = EllexxCardBaseRenderer;
