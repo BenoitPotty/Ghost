@@ -3,7 +3,7 @@ const {
     htmlRelativeToAbsolute,
     htmlToTransformReady
 } = require('@tryghost/url-utils/lib/utils');
-
+const cheerio = require('cheerio');
 class EllexxCardBaseRenderer {
     constructor(name) {
         this.name = name;
@@ -67,6 +67,19 @@ class EllexxCardBaseRenderer {
         return blockElement;
     }
 
+    appendYoutube(html) {
+        const youtubeHtml = cheerio.load(html)('iframe');
+        const iframe = this.dom.createElement('iframe');
+        iframe.setAttribute('width', '100%');
+        iframe.setAttribute('height', '100%');
+        iframe.setAttribute('src', enrichYoutubeUrl(youtubeHtml.attr('src')));
+        iframe.setAttribute('frameborder', youtubeHtml.attr('frameborder'));
+        iframe.setAttribute('allow', youtubeHtml.attr('allow'));
+        iframe.setAttribute('allowfullscreen', youtubeHtml.attr('allowfullscreen'));
+        this.entryPoint.appendChild(iframe);
+        return iframe;
+    }
+
     absoluteToRelative(payload, options) {
         payload.html = payload.html && htmlAbsoluteToRelative(payload.html, options.siteUrl, options);
         return payload;
@@ -81,6 +94,10 @@ class EllexxCardBaseRenderer {
         payload.html = payload.html && htmlToTransformReady(payload.html, options.siteUrl, options);
         return payload;
     }
+}
+
+function enrichYoutubeUrl(url) {
+    return `${url}&modestbranding=1&controls=0`;
 }
 
 module.exports = EllexxCardBaseRenderer;

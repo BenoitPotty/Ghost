@@ -42,6 +42,9 @@ module.exports = {
             const zit = require('./ellexx/zit');
             defaultCards.push(zit);
 
+            const vid = require('./ellexx/vid');
+            defaultCards.push(vid);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
