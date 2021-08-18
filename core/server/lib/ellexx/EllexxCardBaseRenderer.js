@@ -4,6 +4,7 @@ const {
     htmlToTransformReady
 } = require('@tryghost/url-utils/lib/utils');
 const cheerio = require('cheerio');
+const rokkaUtils = require('../image/rokka-utils');
 class EllexxCardBaseRenderer {
     constructor(name) {
         this.name = name;
@@ -52,8 +53,10 @@ class EllexxCardBaseRenderer {
         }
     }
 
-    appendBlock(blockName, parent = undefined) {
-        let content = this.getData(blockName);
+    appendBlock(blockName, parent = null, content = null) {
+        if (content === null) {
+            content = this.getData(blockName);
+        }
         const blockElement = this.dom.createElement('div');
         blockElement.setAttribute('class', this.getClassName(blockName));
         if (content) {
@@ -78,6 +81,27 @@ class EllexxCardBaseRenderer {
         iframe.setAttribute('allowfullscreen', youtubeHtml.attr('allowfullscreen'));
         this.entryPoint.appendChild(iframe);
         return iframe;
+    }
+
+    appendNode(node) {
+        if (!node) {
+            return;
+        }
+        this.entryPoint.appendChild(node);
+    }
+
+    appendImage(src, alt, parent) {
+        if (!src) {
+            return;
+        }
+        const imgElement = this.dom.createElement('img');
+        rokkaUtils.copyAttributes(src, alt, imgElement);
+        if (parent) {
+            parent.appendChild(imgElement);
+        } else {
+            this.entryPoint.appendChild(imgElement);
+        }
+        return imgElement;
     }
 
     absoluteToRelative(payload, options) {

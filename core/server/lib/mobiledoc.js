@@ -45,6 +45,9 @@ module.exports = {
             const vid = require('./ellexx/vid');
             defaultCards.push(vid);
 
+            const ifk = require('./ellexx/ifk');
+            defaultCards.push(ifk);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
