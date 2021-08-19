@@ -1,4 +1,7 @@
 /* eslint-disable no-console */
+
+const handlebarsHelpersUtils = require('./core/ellexx/HandlebarsHelpersUtils');
+
 console.log('\x1b[32m');
 console.log('####################################################');
 console.log('#                                                  #');
@@ -18,3 +21,5 @@ console.log('Other Variables :');
 console.log(`\tDocker Build Number :  ${require('./package').docker.build}`);
 console.log(`\tSystem time :          ${new Date()}`);
 console.log('\x1b[0m');
+
+handlebarsHelpersUtils.addCustomHelpersToGscanKnownHelpers();
