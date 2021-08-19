@@ -5,10 +5,10 @@
   "author": "Ghost Foundation",
   "homepage": "https://ghost.org",
   "docker": {
-      "name": "docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx",
-      "file": "docker/Dockerfile",
-      "compose": "docker/docker-compose.yml",
-      "build": "19"
+    "name": "docker.gitlab.liip.ch/ellexx/ellexx/ghost-ellexx",
+    "file": "docker/Dockerfile",
+    "compose": "docker/docker-compose.yml",
+    "build": "20"
   },
   "keywords": [
     "ghost",
