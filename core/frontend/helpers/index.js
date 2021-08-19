@@ -13,5 +13,4 @@ helperFiles.forEach((helper) => {
 
 // Go through the theme directory
 handlebarsHelpersUtils.addCustomHelpers(helpers);
-
 module.exports = helpers;

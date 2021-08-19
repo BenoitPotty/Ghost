@@ -1,4 +1,4 @@
-const {SafeString} = require('../services/proxy');
+const {SafeString} = require('../../frontend/services/proxy');
 const config = require('../../shared/config');
 const logging = require('@tryghost/logging');
 const _ = require('lodash');

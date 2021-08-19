@@ -1,5 +1,5 @@
 const cheerio = require('cheerio');
-const rokka = require('../../../frontend/helpers/rokka_image');
+const rokka = require('../../../ellexx/helpers/rokka_image');
 
 module.exports = {
     copyAttributesWithStack(src, alt, stack, currentImage) {
