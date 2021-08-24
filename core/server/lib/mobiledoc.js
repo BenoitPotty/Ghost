@@ -48,6 +48,9 @@ module.exports = {
             const ifk = require('./ellexx/ifk');
             defaultCards.push(ifk);
 
+            const lnk = require('./ellexx/lnk');
+            defaultCards.push(lnk);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
