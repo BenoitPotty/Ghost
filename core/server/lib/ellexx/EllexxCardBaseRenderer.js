@@ -72,6 +72,12 @@ class EllexxCardBaseRenderer {
         return blockElement;
     }
 
+    appendIconSpan() {
+        const goToIcon = this.dom.createElement('span');
+        goToIcon.setAttribute('class', this.getClassName('icon-cta'));
+        this.appendNode(goToIcon);
+    }
+
     appendYoutube(html) {
         const youtubeHtml = cheerio.load(html)('iframe');
         const iframe = this.dom.createElement('iframe');

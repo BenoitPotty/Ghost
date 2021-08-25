@@ -11,6 +11,8 @@ class ZitRenderer extends EllexxCardBaseRenderer {
         this.addCardLink();
         this.appendBlock('source');
         this.appendBlock('title');
+        this.appendIconSpan();
+
         return this.root;
     }
 }
