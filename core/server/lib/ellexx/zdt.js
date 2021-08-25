@@ -9,7 +9,7 @@ class ZdtRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom);
         this.initData(payload);
         this.addCardLink();
-        this.appendBlock('number');
+        this.appendBlock('number', null, null, payload.zdt_number.length > 4 ? 'content-xl' : '');
         this.appendBlock('content');
         this.appendBlock('source');
         return this.root;

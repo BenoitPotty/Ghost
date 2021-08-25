@@ -60,12 +60,12 @@ class EllexxCardBaseRenderer {
         }
     }
 
-    appendBlock(blockName, parent = null, content = null) {
+    appendBlock(blockName, parent = null, content = null, classes = null) {
         if (content === null) {
             content = this.getData(blockName);
         }
         const blockElement = this.dom.createElement('div');
-        blockElement.setAttribute('class', this.getClassName(blockName));
+        blockElement.setAttribute('class', classes ? `${this.getClassName(blockName)} ${classes}` : this.getClassName(blockName));
         if (content) {
             blockElement.appendChild(this.dom.createTextNode(content));
         }
