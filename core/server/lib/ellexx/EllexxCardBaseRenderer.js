@@ -74,7 +74,7 @@ class EllexxCardBaseRenderer {
 
     appendIconSpan() {
         const goToIcon = this.dom.createElement('span');
-        goToIcon.setAttribute('class', this.getClassName('icon-cta'));
+        goToIcon.setAttribute('class', 'icon-cta');
         this.appendNode(goToIcon);
     }
 
