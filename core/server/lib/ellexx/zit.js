@@ -9,8 +9,8 @@ class ZitRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom);
         this.initData(payload);
         this.addCardLink();
-        this.appendBlock('quote');
         this.appendBlock('author');
+        this.appendBlock('quote');
         return this.root;
     }
 }
