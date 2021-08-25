@@ -5,6 +5,7 @@ const {
 } = require('@tryghost/url-utils/lib/utils');
 const cheerio = require('cheerio');
 const rokkaUtils = require('../image/rokka-utils');
+const config = require('../../../shared/config');
 class EllexxCardBaseRenderer {
     constructor(name) {
         this.name = name;
@@ -46,10 +47,14 @@ class EllexxCardBaseRenderer {
         if (link === null) {
             link = this.getData(key);
         }
+
         if (link) {
             const linkElement = this.dom.createElement('a');
             linkElement.setAttribute('class', this.getClassName(key));
             linkElement.setAttribute('href', link);
+            if (isExternalLink(link)) {
+                linkElement.setAttribute('target', '_blank');
+            }
             this.entryPoint.appendChild(linkElement);
             this.entryPoint = linkElement;
         }
@@ -130,6 +135,10 @@ class EllexxCardBaseRenderer {
 
 function enrichYoutubeUrl(url) {
     return `${url}&modestbranding=1`;
+}
+
+function isExternalLink(link) {
+    return !link.startsWith(config.getSiteUrl());
 }
 
 module.exports = EllexxCardBaseRenderer;
