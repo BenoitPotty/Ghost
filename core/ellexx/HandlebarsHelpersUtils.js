@@ -1,6 +1,7 @@
 const glob = require('glob');
 const path = require('path');
 const config = require('../shared/config');
+const handlebarsHelpers = require('handlebars-helpers')();
 
 class HandlebarsHelpersUtils {
     addCustomHelpersToGscanKnownHelpers() {
@@ -15,6 +16,9 @@ class HandlebarsHelpersUtils {
 
 function addCustomHelpersToGscan(specs, customHelpers) {
     customHelpers.forEach(helperPath => specs.knownHelpers.push(getHelperName(helperPath)));
+    Object.keys(handlebarsHelpers).forEach((h) => {
+        specs.knownHelpers.push(h);
+    });
 }
 
 function addCustomHelpers(helpers, customHelpers) {
