@@ -45,11 +45,18 @@ class MtfRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom);
         this.initData(payload);
         const personality = this.appendBlock('personality');
-        this.appendBlock('personality_title', personality, this.getMultilangContent('personality'));
+        this.appendBlock('personality-title', personality, this.getMultilangContent('personality'));
         this.appendPersonality('generosity', personality);
         this.appendPersonality('assets', personality);
         this.appendPersonality('decision', personality);
         this.appendPersonality('currency', personality);
+        const background = this.appendBlock('background');
+        this.appendBlock('backgroud-title', background, this.getMultilangContent('background'));
+        this.appendBackground('age', background);
+        this.appendBackground('children', background);
+        this.appendBackground('location', background);
+        this.appendBackground('largest_expense_item', background);
+        this.appendBackground('income', background);
         return this.root;
     }
 
@@ -57,14 +64,23 @@ class MtfRenderer extends EllexxCardBaseRenderer {
         if (this.getData(`${criteria}_display`)) {
             const criteriaContainer = this.appendBlock(criteria, parent, '');
             this.appendSliderLabel(criteria, 'min', criteriaContainer);
-            this.appendSlider(criteria, criteriaContainer);
+            this.appendSlider(criteria, criteriaContainer, 'mtf-personality_slider');
             this.appendSliderLabel(criteria, 'max', criteriaContainer);
+        }
+    }
+
+    appendBackground(item, parent) {
+        const itemValue = this.getData(item);
+        if (itemValue) {
+            const criteriaContainer = this.appendBlock(item, parent, '');
+            this.appendSpan(`${item}_title`, criteriaContainer, this.getMultilangContent(item), 'mtf-background_label');
+            this.appendSpan(`${item}_value`, criteriaContainer, itemValue, 'mtf-background_value');
         }
     }
 
     appendSliderLabel(criteria, suffix, parent) {
         const label = `${criteria}_${suffix}`;
-        this.appendSpan(label , parent, this.getMultilangContent(label));
+        this.appendSpan(label , parent, this.getMultilangContent(label), `mtf-personality_label_${suffix}`);
     }
 
     getMultilangContent(label) {

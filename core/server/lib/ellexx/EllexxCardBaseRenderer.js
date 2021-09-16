@@ -32,8 +32,12 @@ class EllexxCardBaseRenderer {
         return this.data[`${this.name}_${key}`];
     }
 
-    getClassName(key) {
-        return `${this.name}-${key}`;
+    getClassName(key, suffix = null) {
+        if (!suffix) {
+            return `${this.name}-${key}`;
+        } else {
+            return `${this.name}-${key}_${suffix}`;
+        }
     }
 
     renderRootNode() {
@@ -93,7 +97,7 @@ class EllexxCardBaseRenderer {
         blockElement.setAttribute('max', 10);
         blockElement.setAttribute('value', value);
         blockElement.setAttribute('disabled');
-        blockElement.setAttribute('class', classes ? `${this.getClassName(blockName)} ${classes}` : this.getClassName(blockName));
+        blockElement.setAttribute('class', classes ? `${this.getClassName(blockName, 'value')} ${classes}` : this.getClassName(blockName, 'value'));
 
         if (parent) {
             parent.appendChild(blockElement);
