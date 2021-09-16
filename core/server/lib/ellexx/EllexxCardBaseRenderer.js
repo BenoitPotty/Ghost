@@ -61,10 +61,18 @@ class EllexxCardBaseRenderer {
     }
 
     appendBlock(blockName, parent = null, content = null, classes = null) {
+        return this.appendContent('div', blockName, parent, content, classes);
+    }
+
+    appendSpan(blockName, parent = null, content = null, classes = null) {
+        return this.appendContent('span', blockName, parent, content, classes);
+    }
+
+    appendContent(type, blockName, parent, content, classes){
         if (content === null) {
             content = this.getData(blockName);
         }
-        const blockElement = this.dom.createElement('div');
+        const blockElement = this.dom.createElement(type);
         blockElement.setAttribute('class', classes ? `${this.getClassName(blockName)} ${classes}` : this.getClassName(blockName));
         if (content) {
             blockElement.appendChild(this.dom.createTextNode(content));
