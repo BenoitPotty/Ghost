@@ -45,13 +45,13 @@ class MtfRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom);
         this.initData(payload);
         const personality = this.appendBlock('personality');
-        this.appendBlock('personality-title', personality, this.getMultilangContent('personality'));
+        this.appendBlock('personality_title', personality, this.getMultilangContent('personality'));
         this.appendPersonality('generosity', personality);
         this.appendPersonality('assets', personality);
         this.appendPersonality('decision', personality);
         this.appendPersonality('currency', personality);
         const background = this.appendBlock('background');
-        this.appendBlock('backgroud-title', background, this.getMultilangContent('background'));
+        this.appendBlock('backgroud_title', background, this.getMultilangContent('background'));
         this.appendBackground('age', background);
         this.appendBackground('children', background);
         this.appendBackground('location', background);
