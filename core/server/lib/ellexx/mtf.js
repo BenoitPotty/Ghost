@@ -41,7 +41,6 @@ class MtfRenderer extends EllexxCardBaseRenderer {
     }
 
     render({payload, env: {dom}}) {
-        console.log(payload)
         this.initDom(dom);
         this.initData(payload);
         const personality = this.appendBlock('personality');
