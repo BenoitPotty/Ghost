@@ -1,8 +1,8 @@
 const EllexxCardBaseRenderer = require('./EllexxCardBaseRenderer');
 
-class MnfRenderer extends EllexxCardBaseRenderer {
+class MtfRenderer extends EllexxCardBaseRenderer {
     constructor() {
-        super('mnf');
+        super('mtf');
     }
 
     render({payload, env: {dom}}) {
@@ -16,4 +16,4 @@ class MnfRenderer extends EllexxCardBaseRenderer {
     }
 }
 
-module.exports = new MnfRenderer();
+module.exports = new MtfRenderer();
