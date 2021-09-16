@@ -9,10 +9,19 @@ class MtfRenderer extends EllexxCardBaseRenderer {
         console.log(payload)
         this.initDom(dom);
         this.initData(payload);
-        // this.addCardLink();
-        // this.appendBlock('author');
-        // this.appendBlock('quote');
+        const mtf = this.appendBlock('personality');
+        this.displayPersonality('generosity', mtf);
+        this.displayPersonality('assets', mtf);
+        this.displayPersonality('decision', mtf);
+        this.displayPersonality('currency', mtf);
         return this.root;
+    }
+
+    displayPersonality(criteria, parent) {
+        const criteriaContainer = this.appendBlock(criteria, parent, '');
+        if (this.getData(`${criteria}_display`)) {
+            this.appendSlider(criteria, criteriaContainer);
+        }
     }
 }
 

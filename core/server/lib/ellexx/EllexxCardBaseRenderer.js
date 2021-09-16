@@ -77,6 +77,24 @@ class EllexxCardBaseRenderer {
         return blockElement;
     }
 
+    appendSlider(blockName, parent = null, classes = null) {
+        const value = this.getData(blockName);
+        const blockElement = this.dom.createElement('input');
+        blockElement.setAttribute('type', 'range');
+        blockElement.setAttribute('min', 0);
+        blockElement.setAttribute('max', 10);
+        blockElement.setAttribute('value', value);
+        blockElement.setAttribute('disabled');
+        blockElement.setAttribute('class', classes ? `${this.getClassName(blockName)} ${classes}` : this.getClassName(blockName));
+
+        if (parent) {
+            parent.appendChild(blockElement);
+        } else {
+            this.entryPoint.appendChild(blockElement);
+        }
+        return blockElement;
+    }
+
     appendIconSpan() {
         const goToIcon = this.dom.createElement('span');
         goToIcon.setAttribute('class', 'icon-cta');
