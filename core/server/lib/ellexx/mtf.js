@@ -33,7 +33,7 @@ const de = {
     type_min: 'Sparer:in',
     type_max: 'Investor:in',
     assets_min: 'Sparkonto',
-    assets_max: 'Aktion',
+    assets_max: 'Aktien',
     payment_method_min: 'Cash',
     payment_method_max: 'Digital Payment',
     decision_min: 'Haushaltsbuch',
@@ -43,7 +43,7 @@ const de = {
     age: 'Alter',
     children: 'Kinder',
     location: 'Ort',
-    largest_expense_item: 'Ausgabeposten',
+    largest_expense_item: 'Grösster Ausgabeposten',
     income: 'Einkommen',
     job: 'Beruf',
     debts: 'Schulden',
@@ -66,7 +66,7 @@ class MtfRenderer extends EllexxCardBaseRenderer {
         this.appendPersonality('assets', personality);
         this.appendPersonality('currency', personality);
         const background = this.appendBlock('background');
-        this.appendBlock('backgroud_title', background, this.getMultilangContent('background'));
+        this.appendBlock('background_title', background, this.getMultilangContent('background'));
         this.appendBackground('age', background);
         this.appendBackground('children', background);
         this.appendBackground('location', background);
@@ -80,7 +80,7 @@ class MtfRenderer extends EllexxCardBaseRenderer {
 
     appendPersonality(criteria, parent) {
         if (this.getData(`${criteria}_display`)) {
-            const criteriaContainer = this.appendBlock(criteria, parent, '');
+            const criteriaContainer = this.appendBlock(criteria, parent, '', 'mtf-personality_item');
             this.appendSliderLabel(criteria, 'min', criteriaContainer);
             this.appendSlider(criteria, criteriaContainer, 'mtf-personality_slider');
             this.appendSliderLabel(criteria, 'max', criteriaContainer);
