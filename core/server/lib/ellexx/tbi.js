@@ -1,11 +1,12 @@
 const EllexxCardBaseRenderer = require('./EllexxCardBaseRenderer');
 
-class TsbRenderer extends EllexxCardBaseRenderer {
+class TbiRenderer extends EllexxCardBaseRenderer {
     constructor() {
-        super('tsb');
+        super('tbi');
     }
 
     render({payload, env: {dom}}) {
+        console.dir(payload);
         this.initDom(dom);
         this.initData(payload);
         this.addCardLink();
@@ -16,5 +17,5 @@ class TsbRenderer extends EllexxCardBaseRenderer {
     }
 }
 
-module.exports = new TsbRenderer();
+module.exports = new TbiRenderer();
 

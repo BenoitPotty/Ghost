@@ -54,8 +54,8 @@ module.exports = {
             const mtf = require('./ellexx/mtf');
             defaultCards.push(mtf);
 
-            const tsb = require('./ellexx/tsb');
-            defaultCards.push(tsb);
+            const tbi = require('./ellexx/tbi');
+            defaultCards.push(tbi);
 
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
