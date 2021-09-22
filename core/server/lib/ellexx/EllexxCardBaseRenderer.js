@@ -19,9 +19,9 @@ class EllexxCardBaseRenderer {
         this.data = {};
     }
 
-    initDom(dom) {
+    initDom(dom, classes) {
         this.dom = dom;
-        this.renderRootNode();
+        this.renderRootNode(classes);
     }
 
     initData(data) {
@@ -40,9 +40,9 @@ class EllexxCardBaseRenderer {
         }
     }
 
-    renderRootNode() {
+    renderRootNode(classes) {
         this.root = this.dom.createElement('div');
-        this.root.setAttribute('class', this.name);
+        this.root.setAttribute('class', classes ? `${this.name} ${classes}` : this.name);
         this.entryPoint = this.root;
     }
 
@@ -113,7 +113,7 @@ class EllexxCardBaseRenderer {
         this.appendNode(goToIcon);
     }
 
-    appendYoutube(html) {
+    appendYoutube(html, parent = null) {
         const youtubeHtml = cheerio.load(html)('iframe');
         const iframe = this.dom.createElement('iframe');
         iframe.setAttribute('width', '100%');
@@ -122,7 +122,11 @@ class EllexxCardBaseRenderer {
         iframe.setAttribute('frameborder', youtubeHtml.attr('frameborder'));
         iframe.setAttribute('allow', youtubeHtml.attr('allow'));
         iframe.setAttribute('allowfullscreen', youtubeHtml.attr('allowfullscreen'));
-        this.entryPoint.appendChild(iframe);
+        if (parent) {
+            parent.appendChild(iframe);
+        } else {
+            this.entryPoint.appendChild(iframe);
+        }
         return iframe;
     }
 
