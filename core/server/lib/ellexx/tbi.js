@@ -16,7 +16,7 @@ class TbiRenderer extends EllexxCardBaseRenderer {
         this.appendIconSpan();
         if (payload.type === 'video') {
             const modalBlock = this.appendBlock('modal');
-            this.appendYoutube(this.getYoutubeHtml(payload.tbi_video_link_code), modalBlock);
+            this.appendYoutube(this.getYoutubeHtml(payload.tbi_video_link_code), modalBlock, false);
         }
         return this.root;
     }

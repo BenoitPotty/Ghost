@@ -113,12 +113,12 @@ class EllexxCardBaseRenderer {
         this.appendNode(goToIcon);
     }
 
-    appendYoutube(html, parent = null) {
+    appendYoutube(html, parent = null, modestbranding = true) {
         const youtubeHtml = cheerio.load(html)('iframe');
         const iframe = this.dom.createElement('iframe');
         iframe.setAttribute('width', '100%');
         iframe.setAttribute('height', '100%');
-        iframe.setAttribute('src', enrichYoutubeUrl(youtubeHtml.attr('src')));
+        iframe.setAttribute('src', modestbranding ? enrichYoutubeUrl(youtubeHtml.attr('src')) : youtubeHtml.attr('src'));
         iframe.setAttribute('frameborder', youtubeHtml.attr('frameborder'));
         iframe.setAttribute('allow', youtubeHtml.attr('allow'));
         iframe.setAttribute('allowfullscreen', youtubeHtml.attr('allowfullscreen'));
