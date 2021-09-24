@@ -81,11 +81,7 @@ class EllexxCardBaseRenderer {
         if (content) {
             blockElement.appendChild(this.dom.createTextNode(content));
         }
-        if (parent) {
-            parent.appendChild(blockElement);
-        } else {
-            this.entryPoint.appendChild(blockElement);
-        }
+        this.appendNode(blockElement, parent);
         return blockElement;
     }
 
@@ -98,19 +94,15 @@ class EllexxCardBaseRenderer {
         blockElement.setAttribute('value', value);
         blockElement.setAttribute('disabled');
         blockElement.setAttribute('class', classes ? `${this.getClassName(blockName, 'value')} ${classes}` : this.getClassName(blockName, 'value'));
-
-        if (parent) {
-            parent.appendChild(blockElement);
-        } else {
-            this.entryPoint.appendChild(blockElement);
-        }
+        this.appendNode(blockElement, parent);
         return blockElement;
     }
 
-    appendIconSpan() {
-        const goToIcon = this.dom.createElement('span');
-        goToIcon.setAttribute('class', 'icon-cta');
-        this.appendNode(goToIcon);
+    appendIconSpan(iconName = 'icon-cta', parent) {
+        const iconElement = this.dom.createElement('span');
+        iconElement.setAttribute('class', iconName);
+        this.appendNode(iconElement, parent);
+        return iconElement;
     }
 
     appendYoutube(html, parent = null, modestbranding = true) {
@@ -122,19 +114,19 @@ class EllexxCardBaseRenderer {
         iframe.setAttribute('frameborder', youtubeHtml.attr('frameborder'));
         iframe.setAttribute('allow', youtubeHtml.attr('allow'));
         iframe.setAttribute('allowfullscreen', youtubeHtml.attr('allowfullscreen'));
-        if (parent) {
-            parent.appendChild(iframe);
-        } else {
-            this.entryPoint.appendChild(iframe);
-        }
+        this.appendNode(iframe, parent);
         return iframe;
     }
 
-    appendNode(node) {
+    appendNode(node, parent = null) {
         if (!node) {
             return;
         }
-        this.entryPoint.appendChild(node);
+        if (parent){
+            parent.appendChild(node);
+        } else {
+            this.entryPoint.appendChild(node);
+        }
     }
 
     appendImage(src, alt, parent) {
@@ -143,11 +135,7 @@ class EllexxCardBaseRenderer {
         }
         const imgElement = this.dom.createElement('img');
         rokkaUtils.copyAttributes(src, alt, imgElement);
-        if (parent) {
-            parent.appendChild(imgElement);
-        } else {
-            this.entryPoint.appendChild(imgElement);
-        }
+        this.appendNode(imgElement, parent);
         return imgElement;
     }
 
