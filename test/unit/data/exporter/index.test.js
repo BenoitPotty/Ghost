@@ -40,8 +40,8 @@ describe('Exporter', function () {
 
         it('should try to export all the correct tables (without excluded)', function (done) {
             exporter.doExport().then(function (exportData) {
-                // NOTE: 9 default tables
-                const expectedCallCount = 9;
+                // NOTE: 10 default tables
+                const expectedCallCount = 10;
 
                 should.exist(exportData);
 
@@ -62,6 +62,7 @@ describe('Exporter', function () {
                 knexMock.getCall(6).args[0].should.eql('settings');
                 knexMock.getCall(7).args[0].should.eql('tags');
                 knexMock.getCall(8).args[0].should.eql('posts_tags');
+                knexMock.getCall(9).args[0].should.eql('custom_theme_settings');
 
                 done();
             }).catch(done);
@@ -71,8 +72,8 @@ describe('Exporter', function () {
             const include = ['mobiledoc_revisions', 'email_recipients'];
 
             exporter.doExport({include}).then(function (exportData) {
-                // NOTE: 9 default tables + 2 includes
-                const expectedCallCount = 11;
+                // NOTE: 10 default tables + 2 includes
+                const expectedCallCount = 12;
 
                 should.exist(exportData);
 
@@ -96,6 +97,7 @@ describe('Exporter', function () {
                 knexMock.getCall(8).args[0].should.eql('posts_tags');
                 knexMock.getCall(9).args[0].should.eql('mobiledoc_revisions');
                 knexMock.getCall(10).args[0].should.eql('email_recipients');
+                knexMock.getCall(11).args[0].should.eql('custom_theme_settings');
 
                 done();
             }).catch(done);
@@ -173,10 +175,16 @@ describe('Exporter', function () {
             } = require('../../../../core/server/data/exporter/table-lists.js');
 
             const nonSchemaTables = ['migrations', 'migrations_lock'];
+            const requiredTables = schemaTables.concat(nonSchemaTables);
+            // NOTE: You should not add tables to this list unless they are temporary
+            const ignoredTables = ['temp_member_analytic_events'];
+
+            const expectedTables = requiredTables.filter(table => !ignoredTables.includes(table)).sort();
+            const actualTables = BACKUP_TABLES.concat(TABLES_ALLOWLIST).sort();
 
             // NOTE: this test is serving a role of a reminder to have a look into exported tables allowlists
             //       if it failed you probably need to add or remove a table entry from table-lists module
-            [...Object.keys(schema.tables), ...nonSchemaTables].sort().should.eql([...BACKUP_TABLES, ...TABLES_ALLOWLIST].sort());
+            should.deepEqual(actualTables, expectedTables);
         });
 
         it('should be fixed when default settings is changed', function () {

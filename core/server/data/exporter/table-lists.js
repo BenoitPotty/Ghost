@@ -14,6 +14,7 @@ const BACKUP_TABLES = [
     'members_stripe_customers_subscriptions',
     'migrations',
     'migrations_lock',
+    'oauth',
     'permissions',
     'permissions_roles',
     'permissions_users',
@@ -34,7 +35,8 @@ const BACKUP_TABLES = [
     'members_email_change_events',
     'members_status_events',
     'members_paid_subscription_events',
-    'members_subscribe_events'
+    'members_subscribe_events',
+    'members_product_events'
 ];
 
 // NOTE: exposing only tables which are going to be included in a "default" export file
@@ -48,6 +50,7 @@ const TABLES_ALLOWLIST = [
     'roles',
     'roles_users',
     'settings',
+    'custom_theme_settings',
     'tags',
     'users'
 ];
@@ -62,7 +65,8 @@ const SETTING_KEYS_BLOCKLIST = [
     'members_stripe_webhook_id',
     'members_stripe_webhook_secret',
     'oauth_client_id',
-    'oauth_client_secret'
+    'oauth_client_secret',
+    'email_verification_required'
 ];
 
 module.exports = {

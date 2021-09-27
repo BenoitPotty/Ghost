@@ -10,9 +10,34 @@ const {URL} = require('url');
 const mobiledocLib = require('../../lib/mobiledoc');
 const htmlToText = require('html-to-text');
 const {isUnsplashImage, isLocalContentImage} = require('@tryghost/kg-default-cards/lib/utils');
+const {textColorForBackgroundColor, darkenToContrastThreshold} = require('@tryghost/color-utils');
 const logging = require('@tryghost/logging');
 
 const ALLOWED_REPLACEMENTS = ['first_name'];
+
+// Format a full html document ready for email by inlining CSS, adjusting links,
+// and performing any client-specific fixes
+const formatHtmlForEmail = function formatHtmlForEmail(html) {
+    const juiceOptions = {inlinePseudoElements: true};
+
+    let juicedHtml = juice(html, juiceOptions);
+
+    // convert juiced HTML to a DOM-like interface for further manipulation
+    // happens after inlining of CSS so we can change element types without worrying about styling
+    const _cheerio = cheerio.load(juicedHtml);
+
+    // force all links to open in new tab
+    _cheerio('a').attr('target', '_blank');
+    // convert figure and figcaption to div so that Outlook applies margins
+    _cheerio('figure, figcaption').each((i, elem) => !!(elem.tagName = 'div'));
+
+    juicedHtml = _cheerio.html();
+
+    // Fix any unsupported chars in Outlook
+    juicedHtml = juicedHtml.replace(/&apos;/g, '&#39;');
+
+    return juicedHtml;
+};
 
 const getSite = () => {
     const publicSettings = settingsCache.getPublic();
@@ -144,6 +169,10 @@ const parseReplacements = (email) => {
 };
 
 const getTemplateSettings = async () => {
+    const accentColor = settingsCache.get('accent_color');
+    const adjustedAccentColor = accentColor && darkenToContrastThreshold(accentColor, '#ffffff', 2).hex();
+    const adjustedAccentContrastColor = accentColor && textColorForBackgroundColor(adjustedAccentColor).hex();
+
     const templateSettings = {
         headerImage: settingsCache.get('newsletter_header_image'),
         showHeaderIcon: settingsCache.get('newsletter_show_header_icon') && settingsCache.get('icon'),
@@ -154,7 +183,9 @@ const getTemplateSettings = async () => {
         bodyFontCategory: settingsCache.get('newsletter_body_font_category'),
         showBadge: settingsCache.get('newsletter_show_badge'),
         footerContent: settingsCache.get('newsletter_footer_content'),
-        accentColor: settingsCache.get('accent_color')
+        accentColor,
+        adjustedAccentColor,
+        adjustedAccentContrastColor
     };
 
     if (templateSettings.headerImage) {
@@ -209,6 +240,19 @@ const serialize = async (postModel, options = {isBrowserPreview: false, apiVersi
     }
 
     post.html = mobiledocLib.mobiledocHtmlRenderer.render(JSON.parse(post.mobiledoc), {target: 'email'});
+
+    // perform any email specific adjustments to the mobiledoc->HTML render output
+    // body wrapper is required so we can get proper top-level selections
+    let _cheerio = cheerio.load(`<body>${post.html}</body>`);
+    // remove leading/trailing HRs
+    _cheerio(`
+        body > hr:first-child,
+        body > hr:last-child,
+        body > div:first-child > hr:first-child,
+        body > div:last-child > hr:last-child
+    `).remove();
+    post.html = _cheerio('body').html();
+
     post.plaintext = htmlToPlaintext(post.html);
 
     // Outlook will render feature images at full-size breaking the layout.
@@ -244,32 +288,18 @@ const serialize = async (postModel, options = {isBrowserPreview: false, apiVersi
 
     const templateSettings = await getTemplateSettings();
 
-    let htmlTemplate = template({post, site: getSite(), templateSettings});
+    const render = template;
+
+    let htmlTemplate = render({post, site: getSite(), templateSettings});
 
     if (options.isBrowserPreview) {
         const previewUnsubscribeUrl = createUnsubscribeUrl(null);
         htmlTemplate = htmlTemplate.replace('%recipient.unsubscribe_url%', previewUnsubscribeUrl);
     }
 
-    // Inline css to style attributes, turn on support for pseudo classes.
-    const juiceOptions = {inlinePseudoElements: true};
-    let juicedHtml = juice(htmlTemplate, juiceOptions);
-
-    // convert juiced HTML to a DOM-like interface for further manipulation
-    // happens after inlining of CSS so we can change element types without worrying about styling
-    let _cheerio = cheerio.load(juicedHtml);
-    // force all links to open in new tab
-    _cheerio('a').attr('target','_blank');
-    // convert figure and figcaption to div so that Outlook applies margins
-    _cheerio('figure, figcaption').each((i, elem) => !!(elem.tagName = 'div'));
-    juicedHtml = _cheerio.html();
-
-    // Fix any unsupported chars in Outlook
-    juicedHtml = juicedHtml.replace(/&apos;/g, '&#39;');
-
     // Clean up any unknown replacements strings to get our final content
     const {html, plaintext} = normalizeReplacementStrings({
-        html: juicedHtml,
+        html: formatHtmlForEmail(htmlTemplate),
         plaintext: post.plaintext
     });
 
@@ -292,7 +322,8 @@ function renderEmailForSegment(email, memberSegment) {
             $(node).removeAttr('data-gh-segment');
         }
     });
-    result.html = $.html();
+
+    result.html = formatHtmlForEmail($.html());
     result.plaintext = htmlToPlaintext(result.html);
 
     return result;

@@ -66,27 +66,15 @@ module.exports = {
         },
         permissions: true,
         async query(frame) {
-            const defaultWithRelated = ['labels', 'stripeSubscriptions', 'stripeSubscriptions.customer', 'stripeSubscriptions.stripePrice', 'stripeSubscriptions.stripePrice.stripeProduct'];
+            let member = await membersService.api.memberBREADService.read(frame.data, frame.options);
 
-            if (!frame.options.withRelated) {
-                frame.options.withRelated = defaultWithRelated;
-            } else {
-                frame.options.withRelated = frame.options.withRelated.concat(defaultWithRelated);
-            }
-
-            if (frame.options.withRelated.includes('email_recipients')) {
-                frame.options.withRelated.push('email_recipients.email');
-            }
-
-            let model = await membersService.api.members.get(frame.data, frame.options);
-
-            if (!model) {
+            if (!member) {
                 throw new errors.NotFoundError({
                     message: i18n.t('errors.api.members.memberNotFound')
                 });
             }
 
-            return model;
+            return member;
         }
     },
 
@@ -136,8 +124,10 @@ module.exports = {
                     }, frame.options);
                 }
 
-                if (frame.data.members[0].comped) {
-                    await membersService.api.members.setComplimentarySubscription(member);
+                if (!labsService.isSet('multipleProducts')) {
+                    if (frame.data.members[0].comped) {
+                        await membersService.api.members.setComplimentarySubscription(member);
+                    }
                 }
 
                 if (frame.options.send_email) {
@@ -200,14 +190,16 @@ module.exports = {
 
                 const hasCompedSubscription = !!member.related('stripeSubscriptions').find(sub => sub.get('plan_nickname') === 'Complimentary' && sub.get('status') === 'active');
 
-                if (typeof frame.data.members[0].comped === 'boolean') {
-                    if (frame.data.members[0].comped && !hasCompedSubscription) {
-                        await membersService.api.members.setComplimentarySubscription(member);
-                    } else if (!(frame.data.members[0].comped) && hasCompedSubscription) {
-                        await membersService.api.members.cancelComplimentarySubscription(member);
-                    }
+                if (!labsService.isSet('multipleProducts')) {
+                    if (typeof frame.data.members[0].comped === 'boolean') {
+                        if (frame.data.members[0].comped && !hasCompedSubscription) {
+                            await membersService.api.members.setComplimentarySubscription(member);
+                        } else if (!(frame.data.members[0].comped) && hasCompedSubscription) {
+                            await membersService.api.members.cancelComplimentarySubscription(member);
+                        }
 
-                    await member.load(['stripeSubscriptions', 'products', 'stripeSubscriptions.stripePrice', 'stripeSubscriptions.stripePrice.stripeProduct']);
+                        await member.load(['stripeSubscriptions', 'products', 'stripeSubscriptions.stripePrice', 'stripeSubscriptions.stripePrice.stripeProduct']);
+                    }
                 }
 
                 await member.load(['stripeSubscriptions.customer', 'stripeSubscriptions.stripePrice', 'stripeSubscriptions.stripePrice.stripeProduct']);
@@ -379,36 +371,7 @@ module.exports = {
             method: 'destroy'
         },
         async query(frame) {
-            const {all, filter, search} = frame.options;
-
-            if (!filter && !search && (!all || all !== true)) {
-                throw new errors.IncorrectUsageError({
-                    message: 'DELETE /members/ must be used with a filter or ?all=true'
-                });
-            }
-
-            const knexOptions = _.pick(frame.options, ['transacting']);
-            const filterOptions = Object.assign({}, knexOptions);
-
-            if (all !== true) {
-                if (filter) {
-                    filterOptions.filter = filter;
-                }
-
-                if (search) {
-                    filterOptions.search = search;
-                }
-            }
-
-            // fetch ids of all matching members
-            const memberRows = await models.Member
-                .getFilteredCollectionQuery(filterOptions)
-                .select('members.id')
-                .distinct();
-
-            const memberIds = memberRows.map(row => row.id);
-
-            const bulkDestroyResult = await models.Member.bulkDestroy(memberIds);
+            const bulkDestroyResult = await membersService.api.members.bulkDestroy(frame.options);
 
             // shaped to match the importer response
             return {
@@ -421,6 +384,34 @@ module.exports = {
                     errors: bulkDestroyResult.errors
                 }
             };
+        }
+    },
+
+    bulkEdit: {
+        statusCode: 200,
+        headers: {},
+        options: [
+            'all',
+            'filter',
+            'search'
+        ],
+        data: [
+            'action',
+            'meta'
+        ],
+        validation: {
+            data: {
+                action: {
+                    required: true,
+                    values: ['unsubscribe', 'addLabel', 'removeLabel']
+                }
+            }
+        },
+        permissions: {
+            method: 'edit'
+        },
+        async query(frame) {
+            return membersService.api.members.bulkEdit(frame.data, frame.options);
         }
     },
 
@@ -479,7 +470,7 @@ module.exports = {
             const pathToCSV = frame.file.path;
             const headerMapping = frame.data.mapping;
 
-            return membersService.importer.process({
+            return membersService.processImport({
                 pathToCSV,
                 headerMapping,
                 globalLabels,

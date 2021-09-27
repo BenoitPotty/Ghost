@@ -17,6 +17,50 @@ const Member = ghostBookshelf.Model.extend({
         };
     },
 
+    filterExpansions() {
+        return [{
+            key: 'label',
+            replacement: 'labels.slug'
+        }, {
+            key: 'labels',
+            replacement: 'labels.slug'
+        }, {
+            key: 'product',
+            replacement: 'products.slug'
+        }, {
+            key: 'products',
+            replacement: 'products.slug'
+        }];
+    },
+
+    filterRelations() {
+        return {
+            labels: {
+                tableName: 'labels',
+                type: 'manyToMany',
+                joinTable: 'members_labels',
+                joinFrom: 'member_id',
+                joinTo: 'label_id'
+            },
+            products: {
+                tableName: 'products',
+                type: 'manyToMany',
+                joinTable: 'members_products',
+                joinFrom: 'member_id',
+                joinTo: 'product_id'
+            },
+            subscriptions: {
+                tableName: 'members_stripe_customers_subscriptions',
+                tableNameAs: 'subscriptions',
+                type: 'manyToMany',
+                joinTable: 'members_stripe_customers',
+                joinFrom: 'member_id',
+                joinTo: 'customer_id',
+                joinToForeign: 'customer_id'
+            }
+        };
+    },
+
     relationships: ['products', 'labels', 'stripeCustomers', 'email_recipients'],
 
     // do not delete email_recipients records when a member is destroyed. Recipient
@@ -32,6 +76,11 @@ const Member = ghostBookshelf.Model.extend({
         labels: 'labels',
         stripeCustomers: 'members_stripe_customers',
         email_recipients: 'email_recipients'
+    },
+
+    productEvents() {
+        return this.hasMany('MemberProductEvent', 'member_id', 'id')
+            .query('orderBy', 'created_at', 'DESC');
     },
 
     products() {
@@ -91,13 +140,13 @@ const Member = ghostBookshelf.Model.extend({
         ghostBookshelf.Model.prototype.emitChange.bind(this)(this, eventToTrigger, options);
     },
 
-    onCreated: function onCreated(model, attrs, options) {
+    onCreated: function onCreated(model, options) {
         ghostBookshelf.Model.prototype.onCreated.apply(this, arguments);
 
         model.emitChange('added', options);
     },
 
-    onUpdated: function onUpdated(model, attrs, options) {
+    onUpdated: function onUpdated(model, options) {
         ghostBookshelf.Model.prototype.onUpdated.apply(this, arguments);
 
         model.emitChange('edited', options);
@@ -155,6 +204,7 @@ const Member = ghostBookshelf.Model.extend({
                         return label.name.toLowerCase() === lab.get('name').toLowerCase();
                     });
                     label.name = (existingLabel && existingLabel.get('name')) || label.name;
+                    label.id = (existingLabel && existingLabel.id) || label.id;
                 });
 
                 model.set('labels', labelsToSave);
@@ -283,6 +333,19 @@ const Member = ghostBookshelf.Model.extend({
             });
         }
         return ghostBookshelf.Model.destroy.call(this, unfilteredOptions);
+    },
+
+    getLabelRelations(data, unfilteredOptions = {}) {
+        const query = ghostBookshelf.knex('members_labels')
+            .select('id')
+            .where('label_id', data.labelId)
+            .whereIn('member_id', data.memberIds);
+
+        if (unfilteredOptions.transacting) {
+            query.transacting(unfilteredOptions.transacting);
+        }
+
+        return query;
     }
 });
 

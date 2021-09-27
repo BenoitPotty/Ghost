@@ -576,6 +576,7 @@ figure blockquote p {
 .btn {
     box-sizing: border-box;
     width: 100%;
+    display: table;
 }
 
 .btn>tbody>tr>td {
@@ -616,6 +617,16 @@ figure blockquote p {
     background-color: #3498db;
     border-color: #3498db;
     color: #ffffff;
+}
+
+.btn-accent table td {
+    background-color: ${templateSettings.adjustedAccentColor || '#3498db'};
+}
+
+.btn-accent a {
+    background-color: ${templateSettings.adjustedAccentColor || '#3498db'};
+    border-color: ${templateSettings.adjustedAccentColor || '#3498db'};
+    color: ${templateSettings.adjustedAccentContrastColor || '#ffffff'};
 }
 
 /* -------------------------------------
@@ -954,7 +965,7 @@ ${ templateSettings.showBadge ? `
                                     </tr>
                                     ${ templateSettings.showFeatureImage && post.feature_image ? `
                                     <tr>
-                                        <td class="feature-image ${hasFeatureImageCaption ? 'feature-image-with-caption' : ''}"><img src="${post.feature_image}"${post.feature_image_width ? ` width="${post.feature_image_width}"` : ''} alt="${post.feature_image_alt}"></td>
+                                        <td class="feature-image ${hasFeatureImageCaption ? 'feature-image-with-caption' : ''}"><img src="${post.feature_image}"${post.feature_image_width ? ` width="${post.feature_image_width}"` : ''}${post.feature_image_alt ? ` alt="${post.feature_image_alt}"` : ''}></td>
                                     </tr>
                                     ` : ``}
                                     ${ hasFeatureImageCaption ? `

@@ -4,7 +4,7 @@
  * The bridge is responsible for handing communication from the server to the frontend.
  * Data should only be flowing server -> frontend.
  * As the architecture improves, the number of cross requires here should go down
- * Eventually, the aim is to make this a component that is initialised on boot and is either handed to or actively creates the frontend, if the frontend is desired.
+ * Eventually, the aim is to make this a component that is initialized on boot and is either handed to or actively creates the frontend, if the frontend is desired.
  *
  * This file is a great place for all the cross-component event handling in lieu of refactoring
  */
@@ -40,7 +40,7 @@ class Bridge {
         return themeEngine.getActive();
     }
 
-    activateTheme(loadedTheme, checkedTheme, error) {
+    activateTheme(loadedTheme, checkedTheme) {
         let settings = {
             locale: settingsCache.get('lang')
         };
@@ -53,7 +53,7 @@ class Bridge {
                 previousGhostAPI = this.getActiveTheme().engine('ghost-api');
             }
 
-            themeEngine.setActive(settings, loadedTheme, checkedTheme, error);
+            themeEngine.setActive(settings, loadedTheme, checkedTheme);
             const currentGhostAPI = this.getActiveTheme().engine('ghost-api');
 
             if (previousGhostAPI !== undefined && (previousGhostAPI !== currentGhostAPI)) {

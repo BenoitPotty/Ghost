@@ -5,26 +5,22 @@
 const events = require('../../lib/common/events');
 const models = require('../../models');
 const SettingsCache = require('../../../shared/settings-cache');
+const SettingsBREADService = require('./settings-bread-service');
+const {obfuscatedSetting, isSecretSetting, hideValueIfSecret} = require('./settings-utils');
 
-// The string returned when a setting is set as write-only
-const obfuscatedSetting = '••••••••';
-
-// The function used to decide whether a setting is write-only
-function isSecretSetting(setting) {
-    return /secret/.test(setting.key);
-}
-
-// The function that obfuscates a write-only setting
-function hideValueIfSecret(setting) {
-    if (setting.value && isSecretSetting(setting)) {
-        return {...setting, value: obfuscatedSetting};
-    }
-    return setting;
-}
+/**
+ * @returns {SettingsBREADService} instance of the PostsService
+ */
+const getSettingsBREADServiceInstance = () => {
+    return new SettingsBREADService({
+        SettingsModel: models.Settings,
+        settingsCache: SettingsCache
+    });
+};
 
 module.exports = {
     /**
-     * Initialise the cache, used in boot and in testing
+     * Initialize the cache, used in boot and in testing
      */
     async init() {
         const settingsCollection = await models.Settings.populateDefaults();
@@ -39,7 +35,7 @@ module.exports = {
     },
 
     /**
-     * Handles syncronization of routes.yaml hash loaded in the frontend with
+     * Handles synchronization of routes.yaml hash loaded in the frontend with
      * the value stored in the settings table.
      * getRoutesHash is a function to allow keeping "frontend" decoupled from settings
      *
@@ -56,7 +52,24 @@ module.exports = {
         }
     },
 
+    /**
+     * Handles email setting synchronization when email has been verified per instance
+     *
+     * @param {boolean} configValue current email verification value from local config
+     */
+    async syncEmailSettings(configValue) {
+        const isEmailDisabled = SettingsCache.get('email_verification_required');
+
+        if (configValue === true && isEmailDisabled) {
+            return await models.Settings.edit([{
+                key: 'email_verification_required',
+                value: false
+            }], {context: {internal: true}});
+        }
+    },
+
     obfuscatedSetting,
     isSecretSetting,
-    hideValueIfSecret
+    hideValueIfSecret,
+    getSettingsBREADServiceInstance
 };
