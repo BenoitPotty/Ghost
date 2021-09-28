@@ -3,7 +3,7 @@ FROM node:14-buster-slim
 ENV GHOST_CLI_VERSION 1.17.3
 ENV GHOST_INSTALL /var/lib/ghost
 ENV GHOST_CONTENT /var/lib/ghost/content
-ENV GHOST_VERSION 4.9.4
+ENV GHOST_VERSION 4.16.0
 ENV TZ Europe/Zurich
 
 COPY .build/release $GHOST_INSTALL
