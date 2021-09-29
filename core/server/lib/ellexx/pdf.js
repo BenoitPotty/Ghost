@@ -6,7 +6,7 @@ class PdfRenderer extends EllexxCardBaseRenderer {
     }
 
     render({payload, env: {dom}}) {
-        this.initDom(dom);
+        this.initDom(dom, payload.pdf_visibility);
         this.initData(payload);
         this.addCardLink(this.covertUrlToSourceFile(payload.src));
         this.appendIconSpan('icon-pdf');
