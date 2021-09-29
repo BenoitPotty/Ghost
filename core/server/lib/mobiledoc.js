@@ -57,6 +57,9 @@ module.exports = {
             const tbi = require('./ellexx/tbi');
             defaultCards.push(tbi);
 
+            const pdf = require('./ellexx/pdf');
+            defaultCards.push(pdf);
+
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
                 imageOptimization: config.get('imageOptimization'),
