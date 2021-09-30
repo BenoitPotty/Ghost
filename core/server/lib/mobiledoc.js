@@ -33,32 +33,10 @@ module.exports = {
             const defaultCards = require('@tryghost/kg-default-cards');
 
             // TODO: Discover ellex card automatically
-            const zdt = require('./ellexx/zdt');
-            defaultCards.push(zdt);
-
-            const fdw = require('./ellexx/fdw');
-            defaultCards.push(fdw);
-
-            const zit = require('./ellexx/zit');
-            defaultCards.push(zit);
-
-            const vid = require('./ellexx/vid');
-            defaultCards.push(vid);
-
-            const ifk = require('./ellexx/ifk');
-            defaultCards.push(ifk);
-
-            const lnk = require('./ellexx/lnk');
-            defaultCards.push(lnk);
-
-            const mtf = require('./ellexx/mtf');
-            defaultCards.push(mtf);
-
-            const tbi = require('./ellexx/tbi');
-            defaultCards.push(tbi);
-
-            const pdf = require('./ellexx/pdf');
-            defaultCards.push(pdf);
+            const ellexxRenderers = ['zdt', 'fdw', 'zit', 'vid', 'ifk', 'lnk', 'mtf', 'tbi', 'pdf', 'mdh'];
+            ellexxRenderers.forEach((renderer) => {
+                defaultCards.push(require(`./ellexx/${renderer}`));
+            });
 
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
