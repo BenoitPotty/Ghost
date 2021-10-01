@@ -53,15 +53,20 @@ class EllexxCardBaseRenderer {
         }
 
         if (link) {
-            const linkElement = this.dom.createElement('a');
-            linkElement.setAttribute('class', this.getClassName(key));
-            linkElement.setAttribute('href', link);
-            if (isExternalLink(link)) {
-                linkElement.setAttribute('target', '_blank');
-            }
-            this.entryPoint.appendChild(linkElement);
+            const linkElement = this.appendLink(key, this.entryPoint, link);
             this.entryPoint = linkElement;
         }
+    }
+
+    appendLink(name, parent, link){
+        const linkElement = this.dom.createElement('a');
+        linkElement.setAttribute('class', this.getClassName(name));
+        linkElement.setAttribute('href', link);
+        if (isExternalLink(link)) {
+            linkElement.setAttribute('target', '_blank');
+        }
+        this.appendNode(linkElement, parent);
+        return linkElement;
     }
 
     appendBlock(blockName, parent = null, content = null, classes = null) {
