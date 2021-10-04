@@ -6,7 +6,6 @@ class MiniRenderer extends EllexxCardBaseRenderer {
     }
 
     render({payload, env: {dom}}) {
-        console.log(payload)
         this.initDom(dom);
         this.initData(payload);
         this.appendBlock('content');
