@@ -13,7 +13,8 @@ module.exports = {
             'mtf',
             'tbi',
             'pdf',
-            'mdh'
+            'mdh',
+            'pers'
         ];
         ellexxRenderers.forEach((renderer) => {
             defaultCards.push(require(`./renderers/${renderer}`));
