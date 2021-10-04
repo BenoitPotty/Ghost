@@ -4,8 +4,7 @@ const logging = require('@tryghost/logging');
 const config = require('../../shared/config');
 const storage = require('../adapters/storage');
 const imageTransform = require('@tryghost/image-transform');
-const rokkaImage = require('./image/rokka-image');
-const rokkaGallery = require('./image/rokka-gallery');
+const ellexx = require('./ellexx');
 
 let cardFactory;
 let cards;
@@ -31,12 +30,7 @@ module.exports = {
         if (!cards) {
             const CardFactory = require('@tryghost/kg-card-factory');
             const defaultCards = require('@tryghost/kg-default-cards');
-
-            // TODO: Discover ellex card automatically
-            const ellexxRenderers = ['zdt', 'fdw', 'zit', 'vid', 'ifk', 'lnk', 'mtf', 'tbi', 'pdf', 'mdh'];
-            ellexxRenderers.forEach((renderer) => {
-                defaultCards.push(require(`./ellexx/${renderer}`));
-            });
+            ellexx.registerEllexxRenderers(defaultCards);
 
             cardFactory = new CardFactory({
                 siteUrl: config.get('url'),
@@ -54,12 +48,7 @@ module.exports = {
                 return cardFactory.createCard(card);
             });
 
-            // TODO: Move into seperate file. Replace the card renderers by our own rokka renderers
-            let imageRender = cards.find(renderer => renderer.name === 'image');
-            imageRender.render = rokkaImage(imageRender.render);
-
-            let galleryRender = cards.find(renderer => renderer.name === 'gallery');
-            galleryRender.render = rokkaGallery();
+            ellexx.replaceDefautlRenderers(cards);
         }
 
         return cards;

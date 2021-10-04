@@ -1,6 +1,6 @@
 const EllexxCardBaseRenderer = require('./EllexxCardBaseRenderer');
-const activeStorageConfig = require('../../../ellexx/helpers/active_storage_config')();
-const config = require('../../../shared/config');
+const activeStorageConfig = require('../../../../ellexx/helpers/active_storage_config')();
+const config = require('../../../../shared/config');
 
 const de = {
     lang: 'de',
@@ -47,8 +47,6 @@ class PdfRenderer extends EllexxCardBaseRenderer {
             return url.match(/([^/]+)(?=\.\w+$)/)[0];
         }
     }
-
-
     _generaterMembership(parent, langConfig) {
         const langBlock = this.appendBlock(`register-${langConfig.lang}`, parent);
         this.appendSpan(`document-availability`, langBlock, langConfig.availablility);

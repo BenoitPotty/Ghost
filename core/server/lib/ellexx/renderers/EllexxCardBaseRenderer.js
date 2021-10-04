@@ -4,8 +4,8 @@ const {
     htmlToTransformReady
 } = require('@tryghost/url-utils/lib/utils');
 const cheerio = require('cheerio');
-const rokkaUtils = require('../image/rokka-utils');
-const config = require('../../../shared/config');
+const rokkaUtils = require('../rokka-utils');
+const config = require('../../../../shared/config');
 class EllexxCardBaseRenderer {
     constructor(name) {
         this.name = name;
