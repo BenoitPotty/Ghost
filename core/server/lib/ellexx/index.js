@@ -15,7 +15,8 @@ module.exports = {
             'pdf',
             'mdh',
             'pers',
-            'outlook'
+            'outlook',
+            'mini'
         ];
         ellexxRenderers.forEach((renderer) => {
             defaultCards.push(require(`./renderers/${renderer}`));

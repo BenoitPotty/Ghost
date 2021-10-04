@@ -1,16 +1,18 @@
 const EllexxCardBaseRenderer = require('./EllexxCardBaseRenderer');
 
-class VidRenderer extends EllexxCardBaseRenderer {
+class MiniRenderer extends EllexxCardBaseRenderer {
     constructor() {
-        super('vid');
+        super('mini');
     }
 
     render({payload, env: {dom}}) {
+        console.log(payload)
         this.initDom(dom);
         this.initData(payload);
-        this.appendYoutube(`https://youtube.com/embed/${payload.vid_video_link_code}`);
+        this.appendBlock('content');
         return this.root;
     }
 }
 
-module.exports = new VidRenderer();
+module.exports = new MiniRenderer();
+
