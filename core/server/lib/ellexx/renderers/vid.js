@@ -8,7 +8,8 @@ class VidRenderer extends EllexxCardBaseRenderer {
     render({payload, env: {dom}}) {
         this.initDom(dom);
         this.initData(payload);
-        this.appendYoutube(payload.html);
+        console.log(payload)
+        this.appendYoutube(`https://youtube.com/embed/${payload.vid_video_link_code}`);
         return this.root;
     }
 }
