@@ -89,6 +89,13 @@ class EllexxCardBaseRenderer {
         return blockElement;
     }
 
+    appendRaw(blockName, parent, rawContent, classes) {
+        const raw = this.dom.createRawHTMLSection(rawContent);
+        raw.setAttribute('class', classes ? `${this.getClassName(blockName)} ${classes}` : this.getClassName(blockName));
+        this.appendNode(raw, parent);
+        return raw;
+    }
+
     appendSlider(blockName, parent = null, classes = null) {
         const value = this.getData(blockName);
         const blockElement = this.dom.createElement('input');
