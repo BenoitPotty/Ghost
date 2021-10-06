@@ -133,12 +133,12 @@ class EllexxCardBaseRenderer {
     }
 
     appendImage(src, alt, parent) {
-        if (!src) {
-            return;
-        }
         const imgElement = this.dom.createElement('img');
+        if (!src) {
+            this.appendNode(imgElement, parent);
+            return imgElement;
+        }
         rokkaUtils.copyAttributes(src, alt, imgElement);
-        this.appendNode(imgElement, parent);
         return imgElement;
     }
 

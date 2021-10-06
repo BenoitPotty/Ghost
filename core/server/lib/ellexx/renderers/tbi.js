@@ -8,13 +8,16 @@ class TbiRenderer extends EllexxCardBaseRenderer {
     render({payload, env: {dom}}) {
         this.initDom(dom, payload.type);
         this.initData(payload);
-
         if (payload.type !== 'video') {
             this.addCardLink();
         }
 
         const imageWrapper = this.appendBlock('image');
         this.storeVideoId(imageWrapper, payload.tbi_video_link_code);
+        if (payload.usage === 'product') {
+            this.appendBlock('type', imageWrapper);
+            this.appendBlock('text', imageWrapper);
+        }
         const imageElement = this.appendImage(payload.src, payload.alt, imageWrapper);
 
         if (payload.type === 'video') {
