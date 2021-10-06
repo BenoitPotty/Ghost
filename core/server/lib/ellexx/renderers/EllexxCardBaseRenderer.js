@@ -158,10 +158,6 @@ class EllexxCardBaseRenderer {
     }
 }
 
-function enrichYoutubeUrl(url) {
-    return `${url}&modestbranding=1`;
-}
-
 function isExternalLink(link) {
     return !link.startsWith(config.getSiteUrl());
 }
