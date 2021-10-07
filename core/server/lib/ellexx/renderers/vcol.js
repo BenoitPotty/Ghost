@@ -12,7 +12,9 @@ class VcolRenderer extends EllexxCardBaseRenderer {
         this.appendBlock('title');
         this.appendBlock('subtitle');
         const itemsBlock = this.appendBlock('items', null, null);
-
+        console.log(payload)
+        payload.items.sort((e1, e2) => e1.order - e2.order);
+        console.log(payload)
         payload.items.forEach((item) => {
             const itemBlock = this.appendBlock('item', itemsBlock);
             this.appendBlock('item-title', itemBlock, item.title);
