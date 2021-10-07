@@ -1,5 +1,6 @@
 const cheerio = require('cheerio');
 const rokka = require('../../../ellexx/helpers/rokka_image');
+const config = require('../../../shared/config');
 
 module.exports = {
     copyAttributesWithStack(src, alt, stack, currentImage) {
@@ -35,6 +36,17 @@ module.exports = {
     addClass(element, className) {
         const currentClasses = element.getAttribute('class');
         element.setAttribute('class', currentClasses ? `${currentClasses} ${className}` : className);
+    },
+
+    getStack(stackKey) {
+        const storageConfig = config.get('storage');
+        const activeConfig = storageConfig[storageConfig.active];
+
+        if (activeConfig && activeConfig.galleryStack) {
+            return activeConfig[stackKey];
+        } else {
+            return '';
+        }
     }
 };
 

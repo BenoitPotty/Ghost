@@ -9,7 +9,8 @@ class PersRenderer extends EllexxCardBaseRenderer {
         this.initDom(dom, payload.pers_type);
         this.initData(payload);
         const pictureBlock = this.appendBlock('picture');
-        this.appendImage(payload.src, null, pictureBlock);
+        const img = this.appendImage(payload.src, null, pictureBlock, 'teaserStack');
+        img.removeAttribute('srcset');
         const detailsBlock = this.appendBlock('details');
         this.appendBlock('name', detailsBlock);
         this.appendBlock('description', detailsBlock);

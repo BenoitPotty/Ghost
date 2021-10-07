@@ -28,6 +28,7 @@
           "defaultStack": "stage_ellexx_com",
           "galleryStack": "gallery_images_landscape",
           "sourceFileStack": "source_file",
+          "teaserStack": "teaser_square",
           "imageConfiguration" : {
               "srcsets" : [400, 600, 1000],
               "unit" : "w",
