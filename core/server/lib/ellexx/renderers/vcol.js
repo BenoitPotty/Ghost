@@ -6,6 +6,7 @@ class VcolRenderer extends EllexxCardBaseRenderer {
     }
 
     render({payload, env: {dom}}) {
+        const endId = 'collection-end';
         this.initDom(dom);
         this.initData(payload);
         this.appendBlock('title');
@@ -16,8 +17,12 @@ class VcolRenderer extends EllexxCardBaseRenderer {
             const itemBlock = this.appendBlock('item', itemsBlock);
             this.appendBlock('item-title', itemBlock, item.title);
             this.appendRaw('item-content', itemBlock, mdRenderer.render(item.markdown));
-            this.appendBlock('item-go-to-end', itemBlock, payload.vcol_text_to_end);
+            const goToEndBlock = this.appendBlock('item-go-to-end', itemBlock);
+            const link = this.appendLink('link-go-to-end', goToEndBlock, `#${endId}`);
+            this.appendSpan('text_to_end', link);
         });
+
+        this.appendBlock('end').setAttribute('id', endId);
 
         if (payload.vcol_generate_summary) {
             const summaryBlock = this.appendBlock('summary', null, null);
