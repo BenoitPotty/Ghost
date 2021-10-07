@@ -21,7 +21,7 @@ class VcolRenderer extends EllexxCardBaseRenderer {
 
         if (payload.vcol_generate_summary) {
             const summaryBlock = this.appendBlock('summary', null, null);
-            this.appendContent('h2', 'summary_title', summaryBlock);
+            this.appendContent('h2', 'summary_title', summaryBlock, payload.vcol_summary_title);
             payload.items.forEach((item) => {
                 this.appendBlock('item-title', summaryBlock, item.title);
                 this.appendRaw('item-content', summaryBlock, mdRenderer.render(item.markdown));

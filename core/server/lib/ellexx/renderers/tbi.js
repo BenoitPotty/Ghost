@@ -25,7 +25,7 @@ class TbiRenderer extends EllexxCardBaseRenderer {
             this.addCardLink();
         }
 
-        this.appendBlock('text');
+        this.appendBlock('title', null, payload.tbi_text);
         this.appendIconSpan();
 
         if (payload.type === 'video') {
