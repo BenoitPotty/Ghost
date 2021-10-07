@@ -6,19 +6,22 @@ class VcolRenderer extends EllexxCardBaseRenderer {
     }
 
     render({payload, env: {dom}}) {
-        const endId = 'collection-end';
+        const endId = 'end';
         this.initDom(dom);
         this.initData(payload);
         this.appendBlock('title');
         this.appendBlock('subtitle');
         const itemsBlock = this.appendBlock('items', null, null);
-        console.log(payload)
         payload.items.sort((e1, e2) => e1.order - e2.order);
-        console.log(payload)
         payload.items.forEach((item) => {
             const itemBlock = this.appendBlock('item', itemsBlock);
-            this.appendBlock('item-title', itemBlock, item.title);
-            this.appendRaw('item-content', itemBlock, mdRenderer.render(item.markdown));
+            if (item.img_url) {
+                const imgBlock = this.appendBlock('item-img', itemBlock);
+                this.appendImage(item.img_url, '', imgBlock);
+            }
+            const contentBlock = this.appendBlock('item-content', itemBlock);
+            this.appendBlock('item-title', contentBlock, item.title);
+            this.appendRaw('item-content', contentBlock, mdRenderer.render(item.markdown));
             const goToEndBlock = this.appendBlock('item-go-to-end', itemBlock);
             const link = this.appendLink('link-go-to-end', goToEndBlock, `#${endId}`);
             this.appendSpan('text_to_end', link);
