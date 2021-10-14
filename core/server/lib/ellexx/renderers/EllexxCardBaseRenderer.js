@@ -169,7 +169,7 @@ class EllexxCardBaseRenderer {
 }
 
 function isExternalLink(link) {
-    return !link.startsWith(config.getSiteUrl()) && !link.startsWith('#');
+    return !link.startsWith(config.getSiteUrl()) && !link.startsWith('#') && link.startsWith('http');
 }
 
 module.exports = EllexxCardBaseRenderer;
