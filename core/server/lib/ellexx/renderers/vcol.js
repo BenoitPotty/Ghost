@@ -17,7 +17,7 @@ class VcolRenderer extends EllexxCardBaseRenderer {
             const itemBlock = this.appendBlock('item', itemsBlock);
             if (item.img_url) {
                 const imgBlock = this.appendBlock('item-img', itemBlock);
-                this.appendImage(item.img_url, '', imgBlock);
+                this.appendImage(item.img_url, '', imgBlock, 'sourceFileStack');
             }
             const contentBlock = this.appendBlock('item-content', itemBlock);
             this.appendBlock('item-title', contentBlock, item.title);
