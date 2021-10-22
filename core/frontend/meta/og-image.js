@@ -2,6 +2,7 @@ const _ = require('lodash');
 const getContextObject = require('./context-object.js');
 const urlUtils = require('../../shared/url-utils');
 const settingsCache = require('../../shared/settings-cache');
+const throughStack = require('../../ellexx/helpers/twitter_override.js');
 
 function getOgImage(data) {
     const context = data.context ? data.context : null;
@@ -16,7 +17,7 @@ function getOgImage(data) {
         if (contextObject.og_image) {
             return urlUtils.relativeToAbsolute(contextObject.og_image);
         } else if (contextObject.feature_image) {
-            return urlUtils.relativeToAbsolute(contextObject.feature_image);
+            return urlUtils.relativeToAbsolute(throughStack(contextObject.feature_image));
         } else if (settingsCache.get('og_image')) {
             return urlUtils.relativeToAbsolute(settingsCache.get('og_image'));
         } else if (settingsCache.get('cover_image')) {
@@ -25,14 +26,14 @@ function getOgImage(data) {
     }
 
     if (_.includes(context, 'author') && contextObject.cover_image) {
-        return urlUtils.relativeToAbsolute(contextObject.cover_image);
+        return urlUtils.relativeToAbsolute(throughStack(contextObject.cover_image));
     }
 
     if (_.includes(context, 'tag')) {
         if (contextObject.og_image) {
             return urlUtils.relativeToAbsolute(contextObject.og_image);
         } else if (contextObject.feature_image) {
-            return urlUtils.relativeToAbsolute(contextObject.feature_image);
+            return urlUtils.relativeToAbsolute(throughStack(contextObject.feature_image));
         } else if (settingsCache.get('cover_image')) {
             return urlUtils.relativeToAbsolute(settingsCache.get('cover_image'));
         }
