@@ -29,6 +29,7 @@
           "galleryStack": "gallery_images_landscape",
           "sourceFileStack": "source_file",
           "teaserStack": "teaser_square",
+          "twitterStack": "twitter_crop",
           "imageConfiguration" : {
               "srcsets" : [400, 600, 1000],
               "unit" : "w",

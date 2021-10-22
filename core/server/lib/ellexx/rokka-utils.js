@@ -39,14 +39,21 @@ module.exports = {
     },
 
     getStack(stackKey) {
-        const storageConfig = config.get('storage');
-        const activeConfig = storageConfig[storageConfig.active];
-
-        if (activeConfig && activeConfig.galleryStack) {
+        const activeConfig = this.getActiveConfig();
+        if (activeConfig && activeConfig[stackKey]) {
             return activeConfig[stackKey];
         } else {
             return '';
         }
+    },
+
+    getActiveConfig() {
+        const storageConfig = config.get('storage');
+        return storageConfig[storageConfig.active];
+    },
+
+    throughStack(imgSrc, stackKey) {
+        return `https://${this.getActiveConfig().organization}.rokka.io/${this.getStack(stackKey)}/-${imgSrc}-.jpg`;
     }
 };
 
